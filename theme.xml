@@ -1003,8 +1003,50 @@
     </footer>
 
     <!-- ===== GLOBAL JAVASCRIPT ===== -->
-    <script>
+    <script>//<![CDATA[
     (function(){
+      // ---- DYNAMIC SUBMENUS FROM LAYOUT EDITOR ----
+      var mainNav = document.getElementById('mainNav');
+      if(mainNav){
+        var childAnchors = Array.from(mainNav.querySelectorAll(':scope > a'));
+        if(childAnchors.length > 0){
+          var currentWrapper = null;
+          var currentUl = null;
+          childAnchors.forEach(function(a){
+            var text = a.textContent.trim();
+            if(text.indexOf('_') === 0 || text.indexOf('-') === 0){
+              a.textContent = text.replace(/^[_-\s]+/, '');
+              if(currentWrapper && currentUl){
+                var li = document.createElement('li');
+                li.appendChild(a);
+                currentUl.appendChild(li);
+              }
+            } else {
+              currentWrapper = document.createElement('div');
+              currentWrapper.className = 'nav-dropdown';
+              mainNav.insertBefore(currentWrapper, a);
+              currentWrapper.appendChild(a);
+
+              currentUl = document.createElement('ul');
+              currentUl.className = 'dropdown-menu';
+              currentWrapper.appendChild(currentUl);
+            }
+          });
+          mainNav.querySelectorAll('.nav-dropdown').forEach(function(wrap){
+            var ul = wrap.querySelector('.dropdown-menu');
+            if(ul && ul.children.length === 0){
+              ul.remove();
+              wrap.classList.remove('nav-dropdown');
+              var parentA = wrap.querySelector('a');
+              if(parentA){
+                mainNav.insertBefore(parentA, wrap);
+                wrap.remove();
+              }
+            }
+          });
+        }
+      }
+
       // ---- READING PROGRESS BAR ----
       var bar = document.getElementById('reading-progress');
       if(bar){
@@ -1037,6 +1079,6 @@
       }
       if(overlay){ overlay.addEventListener('click', closeMenu); }
     })();
-    </script>
+    //]]></script>
   </body>
 </html>
