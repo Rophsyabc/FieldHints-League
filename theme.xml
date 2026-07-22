@@ -669,6 +669,11 @@
                       </article>
 
                       <!-- Related Posts + TOC Script (runs per post) -->
+                      <!-- Blogger renders the label into a data attribute; JS reads it safely -->
+                      <span id='fl-post-meta'
+                        expr:data-url='data:post.url'
+                        expr:data-label='data:post.labels ? data:post.labels.first.name : ""'
+                        style='display:none'/>
                       <script>
                         (function(){
                           // ---- TABLE OF CONTENTS ----
@@ -696,8 +701,9 @@
                           }
 
                           // ---- RELATED POSTS BY LABEL ----
-                          var currentUrl = '<data:post.url/>';
-                          var firstLabel = '<b:if cond="data:post.labels"><data:post.labels.first.name/></b:if>';
+                          var meta = document.getElementById('fl-post-meta');
+                          var currentUrl = meta ? meta.getAttribute('data-url') : '';
+                          var firstLabel = meta ? meta.getAttribute('data-label') : '';
                           if(firstLabel){
                             var s = document.createElement('script');
                             s.src = '/feeds/posts/default/-/' + encodeURIComponent(firstLabel) + '?alt=json-in-script&amp;max-results=5&amp;callback=flLoadRelated';
