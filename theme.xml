@@ -545,257 +545,262 @@
                     <p class='error-404-text'>The page you're looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
                     <a class='btn-primary' expr:href='data:blog.homepageUrl'>← Back to Homepage</a>
                   </div>
+
+                <!-- ===== SINGLE POST / PAGE ARTICLE VIEW ===== -->
+                <b:elseif cond='data:view.isPost or data:view.isPage or data:view.isSingleItem'/>
+                  <b:loop values='data:posts' var='post'>
+                    <article class='single-post-container'>
+                      <div class='post-tags-wrapper'>
+                        <b:if cond='data:post.labels'>
+                          <b:loop values='data:post.labels' var='label'>
+                            <a class='post-tag' expr:href='data:label.url'><data:label.name/></a>
+                          </b:loop>
+                        </b:if>
+                      </div>
+
+                      <h1 class='single-post-title'><data:post.title/></h1>
+
+                      <div class='single-post-meta'>
+                        <span>By <strong><data:post.author/></strong></span>
+                        <span>•</span>
+                        <span>Published <data:post.timestamp/></span>
+                        <span>•</span>
+                        <span><data:post.commentCount/> Comments</span>
+                      </div>
+
+                      <!-- In-Article Top AdSense -->
+                      <div class='adsense-container'>
+                        <div class='adsense-banner'>ADVERTISEMENT<span>Top In-Article Banner — Replace with your AdSense ins tag (336×280 / Responsive)</span></div>
+                      </div>
+
+                      <!-- Table of Contents (auto-filled by JS) -->
+                      <div class='toc-container' id='toc-container' style='display:none'>
+                        <div class='toc-header'>
+                          <p class='toc-title'>📋 Table of Contents</p>
+                          <span class='toc-toggle' id='toc-toggle'>Collapse ▲</span>
+                        </div>
+                        <ol class='toc-list' id='toc-list'/>
+                      </div>
+
+                      <!-- Post Body -->
+                      <div class='single-post-body' id='post-body'>
+                        <data:post.body/>
+                      </div>
+
+                      <!-- Social Share Buttons -->
+                      <div class='share-buttons'>
+                        <span class='share-label'>Share:</span>
+                        <a class='share-btn tw' expr:href='"https://twitter.com/intent/tweet?text=" + data:post.title + "&amp;url=" + data:post.url' target='_blank'>Twitter / X</a>
+                        <a class='share-btn fb' expr:href='"https://www.facebook.com/sharer/sharer.php?u=" + data:post.url' target='_blank'>Facebook</a>
+                        <a class='share-btn wa' expr:href='"https://api.whatsapp.com/send?text=" + data:post.title + " " + data:post.url' target='_blank'>WhatsApp</a>
+                        <a class='share-btn tg' expr:href='"https://t.me/share/url?url=" + data:post.url + "&amp;text=" + data:post.title' target='_blank'>Telegram</a>
+                        <a class='share-btn li' expr:href='"https://www.linkedin.com/sharing/share-offsite/?url=" + data:post.url' target='_blank'>LinkedIn</a>
+                        <button class='share-btn copy' onclick='navigator.clipboard.writeText(location.href);alert("Post link copied to clipboard!");'>Copy Link</button>
+                      </div>
+
+                      <!-- In-Article Bottom AdSense -->
+                      <div class='adsense-container'>
+                        <div class='adsense-banner'>ADVERTISEMENT<span>Bottom In-Article Banner — Replace with your AdSense ins tag (300×250 / Native)</span></div>
+                      </div>
+
+                      <!-- Related Posts (auto-filled by JS using label API) -->
+                      <div class='related-posts' id='related-posts-container' style='display:none'>
+                        <h3 class='section-title'>Related Stories</h3>
+                        <div class='related-grid' id='related-grid'/>
+                      </div>
+
+                      <!-- Blogger Comments -->
+                      <div class='comments'>
+                        <b:include data='post' name='comments'/>
+                      </div>
+                    </article>
+
+                    <!-- Related Posts + TOC Script (runs per post) -->
+                    <span id='fl-post-meta'
+                      expr:data-url='data:post.url'
+                      expr:data-label='data:post.labels ? data:post.labels.first.name : ""'
+                      style='display:none'/>
+                    <script>
+                      (function(){
+                        // ---- TABLE OF CONTENTS ----
+                        var body = document.getElementById('post-body');
+                        var tocList = document.getElementById('toc-list');
+                        var tocContainer = document.getElementById('toc-container');
+                        var tocToggle = document.getElementById('toc-toggle');
+                        if(body &amp;&amp; tocList){
+                          var headings = body.querySelectorAll('h2, h3');
+                          if(headings.length &gt; 2){
+                            tocContainer.style.display = 'block';
+                            headings.forEach(function(h, i){
+                              var id = 'fl-h-' + i;
+                              h.setAttribute('id', id);
+                              var li = document.createElement('li');
+                              if(h.tagName === 'H3') li.className = 'toc-h3';
+                              li.innerHTML = '&lt;a href="#' + id + '"&gt;' + h.textContent + '&lt;/a&gt;';
+                              tocList.appendChild(li);
+                            });
+                            tocToggle.addEventListener('click', function(){
+                              tocList.style.display = tocList.style.display === 'none' ? '' : 'none';
+                              tocToggle.textContent = tocList.style.display === 'none' ? 'Expand ▼' : 'Collapse ▲';
+                            });
+                          }
+                        }
+
+                        // ---- RELATED POSTS BY LABEL ----
+                        var meta = document.getElementById('fl-post-meta');
+                        var currentUrl = meta ? meta.getAttribute('data-url') : '';
+                        var firstLabel = meta ? meta.getAttribute('data-label') : '';
+                        if(firstLabel){
+                          var s = document.createElement('script');
+                          s.src = '/feeds/posts/default/-/' + encodeURIComponent(firstLabel) + '?alt=json-in-script&amp;max-results=5&amp;callback=flLoadRelated';
+                          document.head.appendChild(s);
+                        }
+                        window.flLoadRelated = function(data){
+                          var entries = (data.feed &amp;&amp; data.feed.entry) ? data.feed.entry : [];
+                          var grid = document.getElementById('related-grid');
+                          var wrap = document.getElementById('related-posts-container');
+                          var filtered = entries.filter(function(e){
+                            var l = e.link.find(function(x){ return x.rel === 'alternate'; });
+                            return l &amp;&amp; l.href !== currentUrl;
+                          }).slice(0,3);
+                          if(filtered.length &gt; 0 &amp;&amp; grid){
+                            wrap.style.display = 'block';
+                            filtered.forEach(function(e){
+                              var href = e.link.find(function(x){ return x.rel === 'alternate'; }).href;
+                              var title = e.title.$t;
+                              var thumb = e.media$thumbnail ? e.media$thumbnail.url.replace('/s72-c/','/s400-c/') : '';
+                              var card = document.createElement('a');
+                              card.href = href;
+                              card.className = 'related-card';
+                              card.innerHTML = (thumb ? '&lt;img src="' + thumb + '" alt="" loading="lazy"/&gt;' : '') +
+                                '&lt;div class="related-card-body"&gt;&lt;p class="related-card-title"&gt;' + title + '&lt;/p&gt;&lt;/div&gt;';
+                              grid.appendChild(card);
+                            });
+                          }
+                        };
+                      })();
+                    </script>
+                  </b:loop>
+
+                <!-- ===== FEED VIEW (HOMEPAGE, LABEL, ARCHIVE, SEARCH, INDEX) ===== -->
                 <b:else/>
-
-                  <!-- ===== FEED VIEW (homepage + label + archive + search) ===== -->
-                  <b:if cond='data:view.isMultipleItems'>
-                    <b:if cond='data:view.isHomepage'>
-                      <!-- Dynamic Hero Section using actual published posts -->
-                      <b:if cond='data:posts.notEmpty'>
-                        <section class='hero' style='margin-bottom:32px;padding:0 0 32px;'>
-                          <div class='hero-inner'>
-                            <!-- Featured Story (Latest Published Post) -->
-                            <b:with value='data:posts.first' var='heroPost'>
-                              <div class='hero-main' expr:style='data:heroPost.featuredImage ? "background:radial-gradient(circle at top left,rgba(29,78,216,.85),rgba(5,7,10,.95)),url(" + data:heroPost.featuredImage + ") center/cover no-repeat;" : (data:heroPost.thumbnailUrl ? "background:radial-gradient(circle at top left,rgba(29,78,216,.85),rgba(5,7,10,.95)),url(" + data:heroPost.thumbnailUrl + ") center/cover no-repeat;" : "background:radial-gradient(circle at top left,rgba(29,78,216,.85),rgba(5,7,10,.95));")'>
-                                <div class='hero-main-content'>
-                                  <b:if cond='data:heroPost.labels'>
-                                    <span class='hero-label'><data:heroPost.labels.first.name/></span>
-                                  <b:else/>
-                                    <span class='hero-label'>Featured Story</span>
-                                  </b:if>
-                                  <h2 class='hero-title'><a expr:href='data:heroPost.url' style='color:#fff;'><data:heroPost.title/></a></h2>
-                                  <p class='hero-excerpt'><data:heroPost.snippet/></p>
-                                  <div class='hero-meta'>
-                                    <span>By <strong><data:heroPost.author/></strong></span>
-                                    <span>•</span>
-                                    <span><data:heroPost.timestamp/></span>
-                                  </div>
-                                  <a class='btn-primary' expr:href='data:heroPost.url'>Read Story →</a>
-                                </div>
-                              </div>
-                            </b:with>
-                            <!-- Top Headlines (Next Published Posts) -->
-                            <aside class='hero-side'>
-                              <h3 class='hero-side-title'>Top headlines</h3>
-                              <b:loop index='i' values='data:posts' var='sidePost'>
-                                <b:if cond='data:i &gt; 0 and data:i &lt; 4'>
-                                  <article class='headline-card'>
-                                    <b:if cond='data:sidePost.labels'>
-                                      <span class='headline-tag'><data:sidePost.labels.first.name/></span>
-                                    <b:else/>
-                                      <span class='headline-tag'>Latest</span>
-                                    </b:if>
-                                    <h4 class='headline-title'><a expr:href='data:sidePost.url'><data:sidePost.title/></a></h4>
-                                  </article>
+                  <b:if cond='data:view.isHomepage'>
+                    <!-- Dynamic Hero Section using actual published posts -->
+                    <b:if cond='data:posts.notEmpty'>
+                      <section class='hero' style='margin-bottom:32px;padding:0 0 32px;'>
+                        <div class='hero-inner'>
+                          <!-- Featured Story (Latest Published Post) -->
+                          <b:with value='data:posts.first' var='heroPost'>
+                            <div class='hero-main' expr:style='data:heroPost.featuredImage ? "background:radial-gradient(circle at top left,rgba(29,78,216,.85),rgba(5,7,10,.95)),url(" + data:heroPost.featuredImage + ") center/cover no-repeat;" : (data:heroPost.thumbnailUrl ? "background:radial-gradient(circle at top left,rgba(29,78,216,.85),rgba(5,7,10,.95)),url(" + data:heroPost.thumbnailUrl + ") center/cover no-repeat;" : "background:radial-gradient(circle at top left,rgba(29,78,216,.85),rgba(5,7,10,.95));")'>
+                              <div class='hero-main-content'>
+                                <b:if cond='data:heroPost.labels'>
+                                  <span class='hero-label'><data:heroPost.labels.first.name/></span>
+                                <b:else/>
+                                  <span class='hero-label'>Featured Story</span>
                                 </b:if>
-                              </b:loop>
-                            </aside>
-                          </div>
-                        </section>
-                      </b:if>
-
-                      <h2 class='section-title'>Latest stories</h2>
-                    </b:if>
-                    <b:if cond='data:view.isLabel'>
-                      <div class='label-header'>
-                        <h2 class='section-title'><data:view.pageTitle/></h2>
-                        <p class='label-count'>Articles tagged with this topic</p>
-                      </div>
-                    </b:if>
-                    <b:if cond='data:view.isArchive'>
-                      <div class='label-header'>
-                        <h2 class='section-title'><data:view.pageTitle/></h2>
-                        <p class='label-count'>Archive</p>
-                      </div>
-                    </b:if>
-                    <b:if cond='data:view.isSearch'>
-                      <div class='label-header'>
-                        <h2 class='section-title'>Search Results</h2>
-                      </div>
-                    </b:if>
-
-                    <div class='card-grid'>
-                      <b:loop values='data:posts' var='post'>
-                        <article class='post-card'>
-                          <div class='post-thumb'>
-                            <b:if cond='data:post.featuredImage'>
-                              <img expr:alt='data:post.title' expr:src='data:post.featuredImage' loading='lazy'/>
-                            <b:elseif cond='data:post.thumbnailUrl'/>
-                              <img expr:alt='data:post.title' expr:src='data:post.thumbnailUrl' loading='lazy'/>
-                            <b:elseif cond='data:post.firstImageUrl'/>
-                              <img expr:alt='data:post.title' expr:src='data:post.firstImageUrl' loading='lazy'/>
-                            <b:else/>
-                              <div class='thumb-placeholder'/>
-                            </b:if>
-                          </div>
-                          <div class='post-body'>
-                            <div class='post-tags-wrapper'>
-                              <b:if cond='data:post.labels'>
-                                <b:loop values='data:post.labels' var='label'>
-                                  <a class='post-tag' expr:href='data:label.url'><data:label.name/></a>
-                                </b:loop>
-                              <b:else/>
-                                <span class='post-tag'>Football</span>
+                                <h2 class='hero-title'><a expr:href='data:heroPost.url' style='color:#fff;'><data:heroPost.title/></a></h2>
+                                <p class='hero-excerpt'><data:heroPost.snippet/></p>
+                                <div class='hero-meta'>
+                                  <span>By <strong><data:heroPost.author/></strong></span>
+                                  <span>•</span>
+                                  <span><data:heroPost.timestamp/></span>
+                                </div>
+                                <a class='btn-primary' expr:href='data:heroPost.url'>Read Story →</a>
+                              </div>
+                            </div>
+                          </b:with>
+                          <!-- Top Headlines (Next Published Posts) -->
+                          <aside class='hero-side'>
+                            <h3 class='hero-side-title'>Top headlines</h3>
+                            <b:loop index='i' values='data:posts' var='sidePost'>
+                              <b:if cond='data:i &gt; 0 and data:i &lt; 4'>
+                                <article class='headline-card'>
+                                  <b:if cond='data:sidePost.labels'>
+                                    <span class='headline-tag'><data:sidePost.labels.first.name/></span>
+                                  <b:else/>
+                                    <span class='headline-tag'>Latest</span>
+                                  </b:if>
+                                  <h4 class='headline-title'><a expr:href='data:sidePost.url'><data:sidePost.title/></a></h4>
+                                </article>
                               </b:if>
-                            </div>
-                            <h3 class='post-title'><a expr:href='data:post.url'><data:post.title/></a></h3>
-                            <p class='post-excerpt'><data:post.snippet/></p>
-                            <div class='post-meta'>
-                              <span><data:post.timestamp/></span><span>•</span><span><data:post.commentCount/> comments</span>
-                            </div>
-                          </div>
-                        </article>
-                      </b:loop>
-                    </div>
+                            </b:loop>
+                          </aside>
+                        </div>
+                      </section>
+                    </b:if>
 
-                    <!-- In-Feed AdSense -->
-                    <div class='adsense-container'>
-                      <div class='adsense-banner'>ADVERTISEMENT<span>In-Feed Responsive Banner — Replace with your AdSense ins tag</span></div>
+                    <h2 class='section-title'>Latest stories</h2>
+                  </b:if>
+                  <b:if cond='data:view.isLabel'>
+                    <div class='label-header'>
+                      <h2 class='section-title'><data:view.pageTitle/></h2>
+                      <p class='label-count'>Articles tagged with this topic</p>
                     </div>
-
-                    <!-- Pagination -->
-                    <div class='pagination-wrapper'>
-                      <b:include data='blog' name='nextprev'/>
+                  </b:if>
+                  <b:if cond='data:view.isArchive'>
+                    <div class='label-header'>
+                      <h2 class='section-title'><data:view.pageTitle/></h2>
+                      <p class='label-count'>Archive</p>
+                    </div>
+                  </b:if>
+                  <b:if cond='data:view.isSearch'>
+                    <div class='label-header'>
+                      <h2 class='section-title'>Search Results</h2>
                     </div>
                   </b:if>
 
-                  <!-- ===== SINGLE POST VIEW ===== -->
-                  <b:if cond='data:view.isPost'>
+                  <div class='card-grid'>
                     <b:loop values='data:posts' var='post'>
-                      <article class='single-post-container'>
-                        <div class='post-tags-wrapper'>
-                          <b:if cond='data:post.labels'>
-                            <b:loop values='data:post.labels' var='label'>
-                              <a class='post-tag' expr:href='data:label.url'><data:label.name/></a>
-                            </b:loop>
+                      <article class='post-card'>
+                        <div class='post-thumb'>
+                          <b:if cond='data:post.featuredImage'>
+                            <img expr:alt='data:post.title' expr:src='data:post.featuredImage' loading='lazy'/>
+                          <b:elseif cond='data:post.thumbnailUrl'/>
+                            <img expr:alt='data:post.title' expr:src='data:post.thumbnailUrl' loading='lazy'/>
+                          <b:elseif cond='data:post.firstImageUrl'/>
+                            <img expr:alt='data:post.title' expr:src='data:post.firstImageUrl' loading='lazy'/>
+                          <b:else/>
+                            <div class='thumb-placeholder'/>
                           </b:if>
                         </div>
-
-                        <h1 class='single-post-title'><data:post.title/></h1>
-
-                        <div class='single-post-meta'>
-                          <span>By <strong><data:post.author/></strong></span>
-                          <span>•</span>
-                          <span>Published <data:post.timestamp/></span>
-                          <span>•</span>
-                          <span><data:post.commentCount/> Comments</span>
-                        </div>
-
-                        <!-- In-Article Top AdSense -->
-                        <div class='adsense-container'>
-                          <div class='adsense-banner'>ADVERTISEMENT<span>Top In-Article Banner — Replace with your AdSense ins tag (336×280 / Responsive)</span></div>
-                        </div>
-
-                        <!-- Table of Contents (auto-filled by JS) -->
-                        <div class='toc-container' id='toc-container' style='display:none'>
-                          <div class='toc-header'>
-                            <p class='toc-title'>📋 Table of Contents</p>
-                            <span class='toc-toggle' id='toc-toggle'>Collapse ▲</span>
+                        <div class='post-body'>
+                          <div class='post-tags-wrapper'>
+                            <b:if cond='data:post.labels'>
+                              <b:loop values='data:post.labels' var='label'>
+                                <a class='post-tag' expr:href='data:label.url'><data:label.name/></a>
+                              </b:loop>
+                            <b:else/>
+                              <span class='post-tag'>Football</span>
+                            </b:if>
                           </div>
-                          <ol class='toc-list' id='toc-list'/>
-                        </div>
-
-                        <!-- Post Body -->
-                        <div class='single-post-body' id='post-body'>
-                          <data:post.body/>
-                        </div>
-
-                        <!-- Social Share Buttons -->
-                        <div class='share-buttons'>
-                          <span class='share-label'>Share:</span>
-                          <a class='share-btn tw' expr:href='"https://twitter.com/intent/tweet?text=" + data:post.title + "&amp;url=" + data:post.url' target='_blank'>Twitter / X</a>
-                          <a class='share-btn fb' expr:href='"https://www.facebook.com/sharer/sharer.php?u=" + data:post.url' target='_blank'>Facebook</a>
-                          <a class='share-btn wa' expr:href='"https://api.whatsapp.com/send?text=" + data:post.title + " " + data:post.url' target='_blank'>WhatsApp</a>
-                          <a class='share-btn tg' expr:href='"https://t.me/share/url?url=" + data:post.url + "&amp;text=" + data:post.title' target='_blank'>Telegram</a>
-                          <a class='share-btn li' expr:href='"https://www.linkedin.com/sharing/share-offsite/?url=" + data:post.url' target='_blank'>LinkedIn</a>
-                          <button class='share-btn copy' onclick='navigator.clipboard.writeText(location.href);alert("Post link copied to clipboard!");'>Copy Link</button>
-                        </div>
-
-                        <!-- In-Article Bottom AdSense -->
-                        <div class='adsense-container'>
-                          <div class='adsense-banner'>ADVERTISEMENT<span>Bottom In-Article Banner — Replace with your AdSense ins tag (300×250 / Native)</span></div>
-                        </div>
-
-                        <!-- Related Posts (auto-filled by JS using label API) -->
-                        <div class='related-posts' id='related-posts-container' style='display:none'>
-                          <h3 class='section-title'>Related Stories</h3>
-                          <div class='related-grid' id='related-grid'/>
-                        </div>
-
-                        <!-- Blogger Comments -->
-                        <div class='comments'>
-                          <b:include data='post' name='comments'/>
+                          <h3 class='post-title'><a expr:href='data:post.url'><data:post.title/></a></h3>
+                          <p class='post-excerpt'>
+                            <b:if cond='data:post.snippet'>
+                              <data:post.snippet/>
+                            <b:elseif cond='data:post.summary'/>
+                              <data:post.summary/>
+                            <b:else/>
+                              Read full article...
+                            </b:if>
+                          </p>
+                          <div class='post-meta'>
+                            <span><data:post.timestamp/></span><span>•</span><span><data:post.commentCount/> comments</span>
+                          </div>
                         </div>
                       </article>
-
-                      <!-- Related Posts + TOC Script (runs per post) -->
-                      <!-- Blogger renders the label into a data attribute; JS reads it safely -->
-                      <span id='fl-post-meta'
-                        expr:data-url='data:post.url'
-                        expr:data-label='data:post.labels ? data:post.labels.first.name : ""'
-                        style='display:none'/>
-                      <script>
-                        (function(){
-                          // ---- TABLE OF CONTENTS ----
-                          var body = document.getElementById('post-body');
-                          var tocList = document.getElementById('toc-list');
-                          var tocContainer = document.getElementById('toc-container');
-                          var tocToggle = document.getElementById('toc-toggle');
-                          if(body &amp;&amp; tocList){
-                            var headings = body.querySelectorAll('h2, h3');
-                            if(headings.length &gt; 2){
-                              tocContainer.style.display = 'block';
-                              headings.forEach(function(h, i){
-                                var id = 'fl-h-' + i;
-                                h.setAttribute('id', id);
-                                var li = document.createElement('li');
-                                if(h.tagName === 'H3') li.className = 'toc-h3';
-                                li.innerHTML = '&lt;a href="#' + id + '"&gt;' + h.textContent + '&lt;/a&gt;';
-                                tocList.appendChild(li);
-                              });
-                              tocToggle.addEventListener('click', function(){
-                                tocList.style.display = tocList.style.display === 'none' ? '' : 'none';
-                                tocToggle.textContent = tocList.style.display === 'none' ? 'Expand ▼' : 'Collapse ▲';
-                              });
-                            }
-                          }
-
-                          // ---- RELATED POSTS BY LABEL ----
-                          var meta = document.getElementById('fl-post-meta');
-                          var currentUrl = meta ? meta.getAttribute('data-url') : '';
-                          var firstLabel = meta ? meta.getAttribute('data-label') : '';
-                          if(firstLabel){
-                            var s = document.createElement('script');
-                            s.src = '/feeds/posts/default/-/' + encodeURIComponent(firstLabel) + '?alt=json-in-script&amp;max-results=5&amp;callback=flLoadRelated';
-                            document.head.appendChild(s);
-                          }
-                          window.flLoadRelated = function(data){
-                            var entries = (data.feed &amp;&amp; data.feed.entry) ? data.feed.entry : [];
-                            var grid = document.getElementById('related-grid');
-                            var wrap = document.getElementById('related-posts-container');
-                            var filtered = entries.filter(function(e){
-                              var l = e.link.find(function(x){ return x.rel === 'alternate'; });
-                              return l &amp;&amp; l.href !== currentUrl;
-                            }).slice(0,3);
-                            if(filtered.length &gt; 0 &amp;&amp; grid){
-                              wrap.style.display = 'block';
-                              filtered.forEach(function(e){
-                                var href = e.link.find(function(x){ return x.rel === 'alternate'; }).href;
-                                var title = e.title.$t;
-                                var thumb = e.media$thumbnail ? e.media$thumbnail.url.replace('/s72-c/','/s400-c/') : '';
-                                var card = document.createElement('a');
-                                card.href = href;
-                                card.className = 'related-card';
-                                card.innerHTML = (thumb ? '&lt;img src="' + thumb + '" alt="" loading="lazy"/&gt;' : '') +
-                                  '&lt;div class="related-card-body"&gt;&lt;p class="related-card-title"&gt;' + title + '&lt;/p&gt;&lt;/div&gt;';
-                                grid.appendChild(card);
-                              });
-                            }
-                          };
-                        })();
-                      </script>
                     </b:loop>
-                  </b:if>
+                  </div>
+
+                  <!-- In-Feed AdSense -->
+                  <div class='adsense-container'>
+                    <div class='adsense-banner'>ADVERTISEMENT<span>In-Feed Responsive Banner — Replace with your AdSense ins tag</span></div>
+                  </div>
+
+                  <!-- Pagination -->
+                  <div class='pagination-wrapper'>
+                    <b:include data='blog' name='nextprev'/>
+                  </div>
+                </b:if>
                 </b:if>
 
               </b:includable>
