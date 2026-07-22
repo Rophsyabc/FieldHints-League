@@ -736,8 +736,8 @@
                       </script>
                     </b:loop>
                   </b:if>
+                </b:if>
 
-                </b:else/>
               </b:includable>
             </b:widget>
           </b:section>
