@@ -801,7 +801,6 @@
                     <b:include data='blog' name='nextprev'/>
                   </div>
                 </b:if>
-                </b:if>
 
               </b:includable>
             </b:widget>
