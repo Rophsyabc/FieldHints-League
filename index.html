@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>Fieldhint League - Official Football Scores, News &amp; Highlights</title>
+  <meta name="description" content="Fieldhint League is your premier source for football scores, fixtures, transfer news, match analysis, and highlights.">
+  <link rel="canonical" href="http://localhost:3000/index.html">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+
+  <!-- RSS Feed -->
+  <link href="/atom.xml" rel="alternate" title="RSS Feed" type="application/atom+xml">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Fieldhint League - Official Football Scores, News &amp; Highlights">
+  <meta property="og:description" content="Premier source for football scores, fixtures, transfer news, match analysis, and highlights.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://localhost:3000/index.html">
+  <meta property="og:site_name" content="Fieldhint League">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1200&auto=format&fit=crop">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Fieldhint League - Official Football Scores, News &amp; Highlights">
+  <meta name="twitter:description" content="Premier source for football scores, fixtures, transfer news, match analysis, and highlights.">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1200&auto=format&fit=crop">
+
+  <!-- JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org","@graph":[
+      {"@type":"Organization","@id":"http://localhost:3000/#organization","name":"Fieldhint League","url":"http://localhost:3000/"},
+      {"@type":"WebSite","@id":"http://localhost:3000/#website","url":"http://localhost:3000/","name":"Fieldhint League","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"http://localhost:3000/search?q={search_term_string}"},"query-input":"required name=search_term_string"}}
+    ]
+  }
+  </script>
+
+  <!-- GA4 Placeholder (replace with real snippet) -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script> -->
+
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div id="reading-progress"></div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <!-- Preview Installer Bar -->
+  <div class="preview-installer-bar" id="previewBar">
+    <div class="preview-bar-title">
+      <span class="preview-bar-badge">COMPLETE THEME</span>
+      Fieldhint League — SEO + AdSense + All Features
+    </div>
+    <div class="preview-bar-actions">
+      <button class="preview-btn preview-btn-secondary" id="installGuideBtn">ℹ️ Install Guide</button>
+      <button class="preview-btn preview-btn-primary" id="downloadXmlBtn">💾 Download XML</button>
+      <button class="preview-bar-close" id="closePreviewBar">✕</button>
+    </div>
+  </div>
+  <button class="preview-restore-btn" id="restorePreviewBar">⚙️</button>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <span class="brand-logo">FL</span>
+        <div>
+          <h1 class="brand-name"><a href="index.html">Fieldhint League</a></h1>
+          <p class="brand-tagline">Official hub for football scores, news &amp; highlights</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <nav class="main-nav" id="mainNav">
+          <a href="#latest" class="active">Home</a>
+          <a href="#fixtures">Fixtures</a>
+          <a href="#latest">News</a>
+          <a href="#teams">Teams</a>
+          <a href="#videos">Videos</a>
+          <a href="#fantasy">Fantasy</a>
+        </nav>
+        <form action="/search" class="search-form" id="headerSearchForm">
+          <input class="search-input" id="headerSearch" name="q" placeholder="Search articles…" type="text">
+          <button class="search-submit" type="submit">🔍</button>
+        </form>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Header AdSense Banner -->
+  <div class="container adsense-container">
+    <div class="adsense-banner">ADVERTISEMENT<span>Header Leaderboard (728×90) — Replace with your AdSense ins tag</span></div>
+  </div>
+
+  <!-- Breadcrumbs (visible on non-homepage — demo shows single post state) -->
+  <nav class="breadcrumbs-bar" id="breadcrumbsBar">
+    <div class="container breadcrumbs" id="breadcrumbsContainer">
+      <a href="index.html">Home</a>
+      <span class="sep">›</span>
+      <a href="#" class="bc-label">Transfers</a>
+      <span class="sep">›</span>
+      <span class="current">Breakthrough Agreement Reached for Superstar Midfielder</span>
+    </div>
+  </nav>
+
+  <!-- Scores strip -->
+  <section class="scores-strip" id="fixtures">
+    <div class="container scores-inner">
+      <div class="score-item">
+        <span class="score-league">Premier League</span>
+        <span class="score-match">FC Lagos 2 - 1 FC Abuja</span>
+        <span class="score-status">FT</span>
+      </div>
+      <div class="score-item">
+        <span class="score-league">Cup Final</span>
+        <span class="score-match">Enugu United <span id="live-home">0</span> - <span id="live-away">0</span> Kano City</span>
+        <span class="score-status live" id="live-time">74'</span>
+      </div>
+      <div class="score-item">
+        <span class="score-league">International</span>
+        <span class="score-match">Nigeria 3 - 2 Ghana</span>
+        <span class="score-status">FT</span>
+      </div>
+      <div class="score-item">
+        <span class="score-league">La Liga</span>
+        <span class="score-match">Real Madrid 4 - 2 Barcelona</span>
+        <span class="score-status">FT</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-main" style="background:radial-gradient(circle at top left,rgba(29,78,216,.85),rgba(5,7,10,.95)),url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1200&auto=format&fit=crop') center/cover no-repeat;">
+        <div class="hero-main-content">
+          <div class="hero-label">Featured Story</div>
+          <h2 class="hero-title">Epic showdown lights up the league opening weekend</h2>
+          <p class="hero-excerpt">Catch all the highlights, key moments, and tactical breakdown from a weekend that set the tone for an unforgettable season.</p>
+          <div class="hero-meta"><span>By Fieldhint League</span><span>•</span><span>Updated 2 hours ago</span></div>
+          <a href="#single-post-demo" class="btn-primary">View latest coverage</a>
+        </div>
+      </div>
+      <aside class="hero-side">
+        <h3 class="hero-side-title">Top headlines</h3>
+        <article class="headline-card"><span class="headline-tag">Transfer News</span><h4 class="headline-title">Star striker seals record-breaking move</h4></article>
+        <article class="headline-card"><span class="headline-tag">Analysis</span><h4 class="headline-title">Five tactical trends from matchday one</h4></article>
+        <article class="headline-card"><span class="headline-tag">Fantasy</span><h4 class="headline-title">Fantasy picks you can't ignore this week</h4></article>
+      </aside>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <main class="page-main" id="latest">
+    <div class="container layout">
+      <section class="content-column">
+
+        <!-- ===== FEED VIEW ===== -->
+        <h2 class="section-title">Latest stories</h2>
+        <div class="card-grid">
+          <!-- Post 1 -->
+          <article class="post-card">
+            <div class="post-thumb"><img src="https://images.unsplash.com/photo-1606925797300-0b35e9d17677?q=80&w=400&auto=format&fit=crop" alt="Transfer" loading="lazy"></div>
+            <div class="post-body">
+              <div class="post-tags-wrapper">
+                <a href="#" class="post-tag">Transfers</a>
+                <a href="#" class="post-tag">Premier League</a>
+              </div>
+              <h3 class="post-title"><a href="#single-post-demo">Breakthrough agreement reached for superstar midfielder</a></h3>
+              <p class="post-excerpt">Negotiations concluded late last night as both clubs finalized terms on a contract set to break league transfer records.</p>
+              <div class="post-meta"><span>Today</span><span>•</span><span>12 comments</span></div>
+            </div>
+          </article>
+          <!-- Post 2 -->
+          <article class="post-card">
+            <div class="post-thumb"><img src="https://images.unsplash.com/photo-1518063319789-7217e6706b04?q=80&w=400&auto=format&fit=crop" alt="Tactics" loading="lazy"></div>
+            <div class="post-body">
+              <div class="post-tags-wrapper">
+                <a href="#" class="post-tag">Analysis</a>
+                <a href="#" class="post-tag">Tactics</a>
+              </div>
+              <h3 class="post-title"><a href="#single-post-demo">Tactical Breakdown: How the underdogs claimed a 3-0 victory</a></h3>
+              <p class="post-excerpt">An in-depth look at the counter-pressing patterns and defensive shapes that neutralized the champions' key creative outlets.</p>
+              <div class="post-meta"><span>Yesterday</span><span>•</span><span>8 comments</span></div>
+            </div>
+          </article>
+          <!-- Post 3 -->
+          <article class="post-card">
+            <div class="post-thumb"><img src="https://images.unsplash.com/photo-1540747737956-37872404a8de?q=80&w=400&auto=format&fit=crop" alt="Fantasy" loading="lazy"></div>
+            <div class="post-body">
+              <div class="post-tags-wrapper">
+                <a href="#" class="post-tag">Fantasy</a>
+                <a href="#" class="post-tag">Matchday</a>
+              </div>
+              <h3 class="post-title"><a href="#single-post-demo">Gameweek 2: Ultimate captain choices and injury updates</a></h3>
+              <p class="post-excerpt">Maximize your points this week with our detailed metrics, expected goals analysis, and premium squad options.</p>
+              <div class="post-meta"><span>2 days ago</span><span>•</span><span>15 comments</span></div>
+            </div>
+          </article>
+        </div>
+
+        <!-- In-Feed AdSense -->
+        <div class="adsense-container">
+          <div class="adsense-banner">ADVERTISEMENT<span>In-Feed Responsive Banner — Replace with your AdSense ins tag</span></div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-wrapper">
+          <nav class="pagination-nav">
+            <a href="#" class="pager-btn">← Newer Posts</a>
+            <a href="#" class="pager-btn">Older Posts →</a>
+          </nav>
+        </div>
+
+        <!-- ===== LABEL / CATEGORY PAGE DEMO ===== -->
+        <div style="margin-top:48px; border-top:1px solid var(--border); padding-top:40px;">
+          <div class="label-header">
+            <h2 class="section-title">Transfers</h2>
+            <p class="label-count">Articles tagged with this topic</p>
+          </div>
+        </div>
+
+        <!-- ===== SINGLE POST ARTICLE VIEW ===== -->
+        <div style="margin-top:32px;" id="single-post-demo">
+          <h2 class="section-title">Single Post View — All Features</h2>
+          <article class="single-post-container">
+            <div class="post-tags-wrapper">
+              <a href="#" class="post-tag">Transfers</a>
+              <a href="#" class="post-tag">#NaijaDerby</a>
+              <a href="#" class="post-tag">Breaking News</a>
+            </div>
+
+            <h1 class="single-post-title">Breakthrough Agreement Reached for Superstar Midfielder</h1>
+
+            <div class="single-post-meta">
+              <span>By <strong>Fieldhint Editor</strong></span>
+              <span>•</span>
+              <span>Published Today at 14:30</span>
+              <span>•</span>
+              <span>12 Comments</span>
+            </div>
+
+            <!-- In-Article Top Ad -->
+            <div class="adsense-container">
+              <div class="adsense-banner">ADVERTISEMENT<span>Top In-Article Banner (336×280 / Responsive)</span></div>
+            </div>
+
+            <!-- Table of Contents (auto-generated by app.js from h2/h3 in post body) -->
+            <div class="toc-container" id="toc-container">
+              <div class="toc-header">
+                <p class="toc-title">📋 Table of Contents</p>
+                <span class="toc-toggle" id="toc-toggle">Collapse ▲</span>
+              </div>
+              <ol class="toc-list" id="toc-list"></ol>
+            </div>
+
+            <!-- Post Body -->
+            <div class="single-post-body" id="post-body">
+              <h2>The Deal Breakdown</h2>
+              <p>In a dramatic turn of events on transfer deadline day, club representatives confirmed an agreement in principle. Negotiations ran until midnight as agents from both sides finalized the structure of the deal.</p>
+              <img src="https://images.unsplash.com/photo-1606925797300-0b35e9d17677?q=80&w=800&auto=format&fit=crop" alt="Transfer Agreement" loading="lazy">
+
+              <h2>Tactical Implications</h2>
+              <p>Tactical analysts highlight that this move will redefine the team's pressing structure, providing depth and creative flair ahead of the upcoming cup final. The manager has already confirmed the player will feature in the next matchday squad.</p>
+
+              <h3>What This Means for the League</h3>
+              <p>The acquisition sends a clear message to rival clubs: the title challenge is real this season. Expected metrics suggest a 23% improvement in chance creation from midfield positions.</p>
+
+              <h2>Fan Reaction</h2>
+              <p>Social media exploded with celebration as the official announcement was made. Within an hour, the hashtag #Transfer had amassed over 2 million impressions globally.</p>
+            </div>
+
+            <!-- Social Share -->
+            <div class="share-buttons">
+              <span class="share-label">Share:</span>
+              <a href="https://twitter.com" target="_blank" class="share-btn tw">Twitter / X</a>
+              <a href="https://facebook.com" target="_blank" class="share-btn fb">Facebook</a>
+              <a href="https://whatsapp.com" target="_blank" class="share-btn wa">WhatsApp</a>
+              <a href="https://telegram.org" target="_blank" class="share-btn tg">Telegram</a>
+              <a href="https://linkedin.com" target="_blank" class="share-btn li">LinkedIn</a>
+              <button class="share-btn copy" onclick="navigator.clipboard.writeText(location.href);alert('Link copied to clipboard!');">Copy Link</button>
+            </div>
+
+            <!-- In-Article Bottom Ad -->
+            <div class="adsense-container">
+              <div class="adsense-banner">ADVERTISEMENT<span>Bottom In-Article Banner (300×250 / Native)</span></div>
+            </div>
+
+            <!-- Related Posts -->
+            <div class="related-posts">
+              <h3 class="section-title">Related Stories</h3>
+              <div class="related-grid">
+                <a href="#" class="related-card">
+                  <img src="https://images.unsplash.com/photo-1518063319789-7217e6706b04?q=80&w=400&auto=format&fit=crop" alt="Related" loading="lazy">
+                  <div class="related-card-body"><p class="related-card-title">Five tactical trends from matchday one</p></div>
+                </a>
+                <a href="#" class="related-card">
+                  <img src="https://images.unsplash.com/photo-1540747737956-37872404a8de?q=80&w=400&auto=format&fit=crop" alt="Related" loading="lazy">
+                  <div class="related-card-body"><p class="related-card-title">Gameweek 2: Fantasy captain choices</p></div>
+                </a>
+                <a href="#" class="related-card">
+                  <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=400&auto=format&fit=crop" alt="Related" loading="lazy">
+                  <div class="related-card-body"><p class="related-card-title">Cup final preview and key battles</p></div>
+                </a>
+              </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comments-section">
+              <h3 class="comments-title">12 Comments</h3>
+              <div class="comment-block">
+                <div class="comment-header">
+                  <div class="comment-avatar">AO</div>
+                  <div>
+                    <div class="comment-author-name">Adewale O.</div>
+                    <div class="comment-time">2 hours ago</div>
+                  </div>
+                </div>
+                <p class="comment-content">Huge signing! This is exactly the creative midfielder we've been missing all season. The manager finally gets his wish.</p>
+              </div>
+              <div class="comment-block">
+                <div class="comment-header">
+                  <div class="comment-avatar">EK</div>
+                  <div>
+                    <div class="comment-author-name">Emeka K.</div>
+                    <div class="comment-time">3 hours ago</div>
+                  </div>
+                </div>
+                <p class="comment-content">The price tag is steep but if he performs like he did last season, it's worth every kobo. Can't wait to see him in the league.</p>
+              </div>
+              <div class="comment-form">
+                <h4>Leave a Comment</h4>
+                <input type="text" placeholder="Your name">
+                <input type="email" placeholder="Your email (not published)">
+                <textarea rows="4" placeholder="Write your comment…"></textarea>
+                <button type="submit">Post Comment</button>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- ===== 404 ERROR PAGE DEMO ===== -->
+        <div style="margin-top:48px; border-top:1px solid var(--border); padding-top:40px;">
+          <h2 class="section-title">Custom 404 Page</h2>
+          <div class="error-404">
+            <div class="error-404-code">404</div>
+            <h1 class="error-404-title">Page Not Found</h1>
+            <p class="error-404-text">The page you're looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
+            <a href="index.html" class="btn-primary">← Back to Homepage</a>
+          </div>
+        </div>
+
+        <!-- Videos -->
+        <section class="videos-row" id="videos">
+          <div class="section-header">
+            <h2 class="section-title">Latest videos</h2>
+            <a href="#" class="section-link">View all →</a>
+          </div>
+          <div class="card-grid">
+            <article class="video-card" data-video-title="Full highlights: opening weekend showreel">
+              <div class="video-thumb"><img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=400&auto=format&fit=crop" alt="Highlights" loading="lazy"></div>
+              <div class="video-body"><span class="video-tag">Highlights</span><h3 class="video-title">Full highlights: opening weekend showreel</h3></div>
+            </article>
+            <article class="video-card" data-video-title="Tactical breakdown: pressing vs possession">
+              <div class="video-thumb"><img src="https://images.unsplash.com/photo-1518063319789-7217e6706b04?q=80&w=400&auto=format&fit=crop" alt="Tactics" loading="lazy"></div>
+              <div class="video-body"><span class="video-tag">Analysis</span><h3 class="video-title">Tactical breakdown: pressing vs possession</h3></div>
+            </article>
+            <article class="video-card" data-video-title="Exclusive chat with the league MVP">
+              <div class="video-thumb"><img src="https://images.unsplash.com/photo-1540747737956-37872404a8de?q=80&w=400&auto=format&fit=crop" alt="Interview" loading="lazy"></div>
+              <div class="video-body"><span class="video-tag">Interview</span><h3 class="video-title">Exclusive chat with the league MVP</h3></div>
+            </article>
+          </div>
+        </section>
+      </section>
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <!-- Sidebar AdSense Top -->
+        <div class="adsense-banner" style="min-height:250px">ADVERTISEMENT<span>Sidebar Top (300×250 Medium Rectangle)</span></div>
+
+        <!-- Search -->
+        <section class="sidebar-card sidebar-search">
+          <h3 class="sidebar-title">Search</h3>
+          <form action="/search" method="get">
+            <input name="q" placeholder="Search articles…" type="text">
+            <button type="submit">🔍</button>
+          </form>
+        </section>
+
+        <!-- League Table -->
+        <section class="sidebar-card">
+          <h3 class="sidebar-title">League table</h3>
+          <ul class="table-list">
+            <li><span><strong>Team</strong></span><span><strong>Pts</strong></span></li>
+            <li><span>1. FC Lagos</span><span>6 pts</span></li>
+            <li><span>2. FC Abuja</span><span>4 pts</span></li>
+            <li><span>3. Enugu United</span><span>3 pts</span></li>
+            <li><span>4. Kano City</span><span>3 pts</span></li>
+          </ul>
+        </section>
+
+        <!-- Trending Topics -->
+        <section class="sidebar-card">
+          <h3 class="sidebar-title">Trending topics</h3>
+          <ul class="tag-list">
+            <li>#NaijaDerby</li>
+            <li>#MatchdayOne</li>
+            <li>#TransferWindow</li>
+            <li>#FantasyLeague</li>
+          </ul>
+        </section>
+
+        <!-- Sidebar AdSense Bottom -->
+        <div class="adsense-banner" style="min-height:300px">ADVERTISEMENT<span>Sidebar Sticky Skyscraper (300×600)</span></div>
+
+        <!-- Newsletter -->
+        <section class="sidebar-card sidebar-newsletter">
+          <h3 class="sidebar-title">Newsletter</h3>
+          <p>Get weekly football recaps, analysis and exclusive stories straight to your inbox.</p>
+          <form id="newsletterForm">
+            <input type="email" id="newsletterEmail" placeholder="Enter your email" required>
+            <button type="submit">Subscribe</button>
+          </form>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Footer AdSense -->
+  <div class="container adsense-container">
+    <div class="adsense-banner">ADVERTISEMENT<span>Footer Leaderboard (728×90) — Replace with your AdSense ins tag</span></div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-column">
+        <h4>About Fieldhint League</h4>
+        <p>Fieldhint League is your trusted source for fixtures, scores, news and in-depth football coverage.</p>
+      </div>
+      <div class="footer-column">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#">Teams</a></li>
+          <li><a href="#">Stats</a></li>
+          <li><a href="#">Fantasy</a></li>
+          <li><a href="#">Shop</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="https://youtube.com" target="_blank">YouTube</a></li>
+          <li><a href="https://tiktok.com" target="_blank">TikTok</a></li>
+          <li><a href="https://twitter.com" target="_blank">Twitter / X</a></li>
+          <li><a href="https://instagram.com" target="_blank">Instagram</a></li>
+        </ul>
+      </div>
+      <div class="footer-column footer-meta">
+        <p>© 2026 Fieldhint League. All rights reserved.</p>
+        <p><a href="#">Privacy Policy</a> · <a href="#">Terms</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Installation Guide Modal -->
+  <div class="modal-overlay" id="guideModal">
+    <div class="modal-content">
+      <button class="modal-close-btn" id="closeGuideModal">✕</button>
+      <h3 class="modal-title">How to Install on Blogspot</h3>
+      <ol class="modal-steps">
+        <li>Click <strong>Download XML Theme</strong> to get <code>theme.xml</code>.</li>
+        <li>Go to <a href="https://www.blogger.com" target="_blank" style="color:var(--primary-h);text-decoration:underline">blogger.com</a> → your blog → <strong>Theme</strong>.</li>
+        <li>Click the arrow ▼ next to Customise → select <strong>Restore</strong>.</li>
+        <li>Click <strong>Upload</strong> and choose <code>theme.xml</code>.</li>
+        <li>After install, go to <strong>Layout</strong> and edit the <em>"Google Analytics 4"</em> widget to add your GA4 script.</li>
+        <li>Edit each <em>"AdSense"</em> widget and replace the placeholder with your real <code>&lt;ins class="adsbygoogle"&gt;</code> code.</li>
+        <li>✅ Done — your fully SEO + AdSense optimised theme is live!</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- Video Lightbox -->
+  <div class="video-lightbox" id="videoLightbox">
+    <button class="video-lightbox-close" id="closeVideoLightbox">✕</button>
+    <div class="video-container">
+      <div class="video-placeholder-text">
+        <span style="font-size:48px;display:block;margin-bottom:12px;">📺</span>
+        <h3 id="lightboxVideoTitle">Video Title</h3>
+        <p style="color:var(--text-3);font-size:14px;">Premium video player layout simulation.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
