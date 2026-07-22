@@ -387,7 +387,7 @@
   <body>
     <!-- ===== GA4 ANALYTICS WIDGET (edit in Blogger Layout) ===== -->
     <b:section id='ga4-analytics' showaddelement='yes'>
-      <b:widget id='HTML_GA4' locked='false' title='Google Analytics 4 — Paste GA4 script here' type='HTML'>
+      <b:widget id='HTML1' locked='false' title='Google Analytics 4 — Paste GA4 script here' type='HTML'>
         <b:includable id='main'>
           <!--
             INSTRUCTIONS: Replace this comment with your GA4 script.
@@ -445,7 +445,7 @@
     <!-- Header AdSense Widget -->
     <div class='container adsense-container'>
       <b:section id='header-ad-banner' showaddelement='yes'>
-        <b:widget id='HTML90' locked='false' title='Header AdSense Banner (728x90)' type='HTML'>
+        <b:widget id='HTML2' locked='false' title='Header AdSense Banner (728x90)' type='HTML'>
           <b:includable id='main'>
             <div class='adsense-banner'>ADVERTISEMENT<span>Header Leaderboard — Replace with your AdSense ins tag (728×90 / Responsive)</span></div>
           </b:includable>
@@ -761,7 +761,7 @@
         <aside class='sidebar'>
           <!-- Sidebar AdSense Top -->
           <b:section id='sidebar-ad-top' showaddelement='yes'>
-            <b:widget id='HTML91' locked='false' title='Sidebar AdSense (300x250)' type='HTML'>
+            <b:widget id='HTML3' locked='false' title='Sidebar AdSense (300x250)' type='HTML'>
               <b:includable id='main'><div class='adsense-banner' style='min-height:250px'>ADVERTISEMENT<span>Sidebar Medium Rectangle — Replace with your AdSense ins tag (300×250)</span></div></b:includable>
             </b:widget>
           </b:section>
@@ -800,14 +800,14 @@
 
           <!-- Sidebar AdSense Bottom -->
           <b:section id='sidebar-ad-bottom' showaddelement='yes'>
-            <b:widget id='HTML92' locked='false' title='Sidebar AdSense Sticky (300x600)' type='HTML'>
+            <b:widget id='HTML4' locked='false' title='Sidebar AdSense Sticky (300x600)' type='HTML'>
               <b:includable id='main'><div class='adsense-banner' style='min-height:300px'>ADVERTISEMENT<span>Sidebar Half Page — Replace with your AdSense ins tag (300×600)</span></div></b:includable>
             </b:widget>
           </b:section>
 
           <!-- Newsletter -->
           <b:section id='league-newsletter' class='sidebar-card sidebar-newsletter' showaddelement='yes'>
-            <b:widget id='HTML1' locked='false' title='Newsletter' type='HTML'>
+            <b:widget id='HTML5' locked='false' title='Newsletter' type='HTML'>
               <b:includable id='main'>
                 <h3 class='sidebar-title'>Newsletter</h3>
                 <p>Get weekly football recaps, analysis and exclusive stories straight to your inbox.</p>
@@ -825,7 +825,7 @@
     <!-- Footer AdSense -->
     <div class='container adsense-container'>
       <b:section id='footer-ad-banner' showaddelement='yes'>
-        <b:widget id='HTML93' locked='false' title='Footer AdSense Banner (728x90)' type='HTML'>
+        <b:widget id='HTML6' locked='false' title='Footer AdSense Banner (728x90)' type='HTML'>
           <b:includable id='main'><div class='adsense-banner'>ADVERTISEMENT<span>Footer Leaderboard — Replace with your AdSense ins tag (728×90 / Responsive)</span></div></b:includable>
         </b:widget>
       </b:section>
