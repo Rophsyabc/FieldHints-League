@@ -101,27 +101,6 @@
     <!-- Blogger default head -->
     <b:include data='blog' name='all-head-content'/>
 
-    <!-- ===== GA4 ANALYTICS WIDGET (edit in Blogger Layout) ===== -->
-    <b:section id='ga4-head' showaddelement='yes'>
-      <b:widget id='HTML_GA4' locked='false' title='Google Analytics 4 — Paste GA4 script here' type='HTML'>
-        <b:includable id='main'>
-          <!--
-            INSTRUCTIONS: Replace this comment with your GA4 script.
-
-            <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-            <script>
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-XXXXXXXXXX');
-            </script>
-
-            Get your Measurement ID from analytics.google.com
-          -->
-        </b:includable>
-      </b:widget>
-    </b:section>
-
     <!-- ===== MAIN STYLESHEET ===== -->
     <b:skin><![CDATA[
       /* ---- CSS RESET ---- */
@@ -406,6 +385,26 @@
   </head>
 
   <body>
+    <!-- ===== GA4 ANALYTICS WIDGET (edit in Blogger Layout) ===== -->
+    <b:section id='ga4-analytics' showaddelement='yes'>
+      <b:widget id='HTML_GA4' locked='false' title='Google Analytics 4 — Paste GA4 script here' type='HTML'>
+        <b:includable id='main'>
+          <!--
+            INSTRUCTIONS: Replace this comment with your GA4 script.
+
+            <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+            <script>
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-XXXXXXXXXX');
+            </script>
+
+            Get your Measurement ID from analytics.google.com
+          -->
+        </b:includable>
+      </b:widget>
+    </b:section>
     <!-- Reading Progress Bar -->
     <div id='reading-progress'/>
 
