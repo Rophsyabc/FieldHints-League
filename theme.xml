@@ -686,7 +686,7 @@
                 <b:else/>
                   <b:if cond='data:view.isHomepage'>
                     <!-- Dynamic Hero Section using actual published posts -->
-                    <b:if cond='data:posts.notEmpty'>
+                    <b:if cond='data:posts'>
                       <section class='hero' style='margin-bottom:32px;padding:0 0 32px;'>
                         <div class='hero-inner'>
                           <!-- Featured Story (Latest Published Post) -->
@@ -800,7 +800,7 @@
                   <div class='pagination-wrapper'>
                     <b:include data='blog' name='nextprev'/>
                   </div>
-                </b:if>
+                </b:if><!-- closes isError b:if -->
 
               </b:includable>
             </b:widget>
