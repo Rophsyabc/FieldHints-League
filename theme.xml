@@ -144,9 +144,35 @@
       .brand-tagline { margin:2px 0 0; font-size:12px; color:var(--text-3); }
 
       .header-right { display:flex; align-items:center; gap:12px; }
-      .main-nav { display:flex; flex-wrap:wrap; gap:6px; }
-      .main-nav a { color:var(--text-2); font-size:13px; font-weight:600; padding:7px 14px; border-radius:20px; border:1px solid transparent; transition:all .2s var(--ease); }
+      .main-nav { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+      .main-nav a { color:var(--text-2); font-size:13px; font-weight:600; padding:7px 14px; border-radius:20px; border:1px solid transparent; transition:all .2s var(--ease); display:inline-flex; align-items:center; gap:4px; }
       .main-nav a:hover, .main-nav a.active { color:#fff; background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.06); }
+
+      /* ---- SUBMENU DROPDOWNS ---- */
+      .nav-dropdown { position:relative; display:inline-block; }
+      .nav-dropdown > a::after { content:' ▾'; font-size:10px; margin-left:3px; opacity:.7; }
+      .dropdown-menu { position:absolute; top:100%; left:0; min-width:180px; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:8px 0; margin-top:6px; box-shadow:var(--shadow-lg); opacity:0; visibility:hidden; transform:translateY(8px); transition:all .25s var(--ease); z-index:1000; list-style:none; }
+      .nav-dropdown:hover .dropdown-menu { opacity:1; visibility:visible; transform:translateY(0); }
+      .dropdown-menu li { margin:0; }
+      .dropdown-menu li a { display:block; padding:8px 16px; font-size:13px; color:var(--text-2); border-radius:0; border:none; width:100%; text-align:left; }
+      .dropdown-menu li a:hover { background:rgba(37,99,235,.15); color:var(--primary-h); padding-left:20px; }
+
+      /* ---- POPULAR POSTS WIDGET ---- */
+      .popular-posts-list { display:flex; flex-direction:column; gap:14px; margin-top:12px; }
+      .popular-post-item { display:flex; gap:12px; align-items:center; }
+      .popular-post-thumb { width:64px; height:64px; border-radius:10px; overflow:hidden; flex-shrink:0; background:var(--bg-darker); border:1px solid var(--border); }
+      .popular-post-thumb img { width:100%; height:100%; object-fit:cover; }
+      .popular-post-info { flex:1; min-width:0; }
+      .popular-post-title { font-size:13px; font-weight:700; margin:0 0 4px; line-height:1.3; overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+      .popular-post-title a { color:var(--text-1); }
+      .popular-post-title a:hover { color:var(--primary-h); }
+      .popular-post-date { font-size:11px; color:var(--text-3); }
+
+      /* ---- HERO SLIDER ---- */
+      .hero-slider-wrapper { position:relative; overflow:hidden; border-radius:20px; margin-bottom:32px; border:1px solid var(--border); box-shadow:var(--shadow-lg); background:var(--bg-card); }
+      .hero-slide { position:relative; min-height:360px; display:flex; align-items:flex-end; padding:36px; background-size:cover; background-position:center; }
+      .hero-slide::before { content:''; position:absolute; inset:0; background:linear-gradient(to top,rgba(5,7,10,.95) 20%,rgba(5,7,10,.4) 70%,transparent); z-index:1; }
+      .hero-slide-content { position:relative; z-index:2; max-width:640px; }
 
       /* ---- SEARCH FORM ---- */
       .search-form { display:flex; align-items:center; position:relative; }
@@ -457,10 +483,25 @@
                     </b:loop>
                   <b:else/>
                     <a expr:href='data:blog.homepageUrl'>Home</a>
+                    <div class='nav-dropdown'>
+                      <a href='#latest'>News</a>
+                      <ul class='dropdown-menu'>
+                        <li><a href='/search/label/Premier%20League'>Premier League</a></li>
+                        <li><a href='/search/label/La%20Liga'>La Liga</a></li>
+                        <li><a href='/search/label/Transfers'>Transfers</a></li>
+                        <li><a href='/search/label/Analysis'>Tactical Analysis</a></li>
+                      </ul>
+                    </div>
+                    <div class='nav-dropdown'>
+                      <a href='#videos'>Videos</a>
+                      <ul class='dropdown-menu'>
+                        <li><a href='#videos'>Match Highlights</a></li>
+                        <li><a href='#videos'>Goals of the Week</a></li>
+                        <li><a href='#videos'>Interviews</a></li>
+                      </ul>
+                    </div>
                     <a href='#fixtures'>Fixtures</a>
-                    <a href='#latest'>News</a>
                     <a href='#teams'>Teams</a>
-                    <a href='#videos'>Videos</a>
                     <a href='#fantasy'>Fantasy</a>
                   </b:if>
                 </nav>
@@ -521,14 +562,47 @@
       </nav>
     </b:if>
 
+    <!-- ===== HERO POST SLIDER SECTION (Editable in Layout) ===== -->
+    <b:if cond='data:view.isHomepage'>
+      <div class='container' style='margin-top:24px;'>
+        <b:section id='hero-slider-section' showaddelement='yes' title='Hero Post Slider'>
+          <b:widget id='FeaturedPost1' locked='false' title='Featured Post Slider' type='FeaturedPost'>
+            <b:includable id='main'>
+              <div class='hero-slider-wrapper' id='heroSlider'>
+                <b:if cond='data:post.title'>
+                  <div class='hero-slide' expr:style='data:post.featuredImage ? "background:radial-gradient(circle at top left,rgba(29,78,216,.85),rgba(5,7,10,.95)),url(" + data:post.featuredImage + ") center/cover no-repeat;" : "background:radial-gradient(circle at top left,rgba(29,78,216,.85),rgba(5,7,10,.95));"'>
+                    <div class='hero-slide-content'>
+                      <span class='hero-label'>Featured Story</span>
+                      <h2 class='hero-title'><a expr:href='data:post.url' style='color:#fff;'><data:post.title/></a></h2>
+                      <p class='hero-excerpt'><data:post.snippet/></p>
+                      <a class='btn-primary' expr:href='data:post.url'>Read Story →</a>
+                    </div>
+                  </div>
+                <b:else/>
+                  <div class='hero-slide' style='background:radial-gradient(circle at top left,#1d4ed8,#05070a 80%);'>
+                    <div class='hero-slide-content'>
+                      <span class='hero-label'>Welcome to <data:blog.title/></span>
+                      <h2 class='hero-title'>Official Football Scores, News &amp; Highlights</h2>
+                      <p class='hero-excerpt'>Get live match updates, in-depth tactical analysis, and exclusive football coverage.</p>
+                      <a class='btn-primary' href='#latest'>Explore Stories →</a>
+                    </div>
+                  </div>
+                </b:if>
+              </div>
+            </b:includable>
+          </b:widget>
+        </b:section>
+      </div>
+    </b:if>
+
     <!-- ===== MAIN CONTENT ===== -->
     <main class='page-main' id='latest'>
       <div class='container layout'>
         <section class='content-column'>
 
           <!-- BLOG WIDGET — handles all page types -->
-          <b:section id='main-blog-posts' showaddelement='no'>
-            <b:widget id='Blog1' locked='true' title='Blog Posts' type='Blog'>
+          <b:section id='main-blog-posts' showaddelement='yes'>
+            <b:widget id='Blog1' locked='false' title='Blog Posts' type='Blog'>
               <b:includable id='main'>
 
                 <!-- 404 ERROR PAGE -->
@@ -820,17 +894,37 @@
             </form>
           </section>
 
-          <!-- League Table -->
-          <section class='sidebar-card'>
-            <h3 class='sidebar-title'>League table</h3>
-            <ul class='table-list'>
-              <li><span><strong>Team</strong></span><span><strong>Pts</strong></span></li>
-              <li><span>1. FC Lagos</span><span>6 pts</span></li>
-              <li><span>2. FC Abuja</span><span>4 pts</span></li>
-              <li><span>3. Enugu United</span><span>3 pts</span></li>
-              <li><span>4. Kano City</span><span>3 pts</span></li>
-            </ul>
-          </section>
+          <!-- Popular Posts Widget (Editable in Layout) -->
+          <b:section id='sidebar-widgets' showaddelement='yes' title='Sidebar Widgets'>
+            <b:widget id='PopularPosts1' locked='false' title='Popular Posts' type='PopularPosts'>
+              <b:includable id='main'>
+                <div class='sidebar-card'>
+                  <b:if cond='data:title != ""'>
+                    <h3 class='sidebar-title'><data:title/></h3>
+                  </b:if>
+                  <div class='popular-posts-list'>
+                    <b:loop values='data:posts' var='post'>
+                      <div class='popular-post-item'>
+                        <b:if cond='data:post.featuredImage'>
+                          <div class='popular-post-thumb'>
+                            <img expr:alt='data:post.title' expr:src='data:post.featuredImage' loading='lazy'/>
+                          </div>
+                        <b:elseif cond='data:post.thumbnailUrl'/>
+                          <div class='popular-post-thumb'>
+                            <img expr:alt='data:post.title' expr:src='data:post.thumbnailUrl' loading='lazy'/>
+                          </div>
+                        </b:if>
+                        <div class='popular-post-info'>
+                          <h4 class='popular-post-title'><a expr:href='data:post.url'><data:post.title/></a></h4>
+                          <span class='popular-post-date'><data:post.date/></span>
+                        </div>
+                      </div>
+                    </b:loop>
+                  </div>
+                </div>
+              </b:includable>
+            </b:widget>
+          </b:section>
 
           <!-- Trending Tags -->
           <section class='sidebar-card'>
