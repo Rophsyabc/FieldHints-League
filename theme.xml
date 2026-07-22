@@ -415,22 +415,58 @@
     <header class='site-header'>
       <div class='container header-inner'>
         <div class='brand'>
-          <span class='brand-logo'>FL</span>
-          <div>
-            <h1 class='brand-name'><a expr:href='data:blog.homepageUrl'><data:blog.title/></a></h1>
-            <p class='brand-tagline'>Official hub for football scores, news &amp; highlights</p>
-          </div>
+          <b:section id='header-logo' showaddelement='yes'>
+            <b:widget id='Header1' locked='false' title='Header Logo &amp; Title' type='Header'>
+              <b:includable id='main'>
+                <b:if cond='data:useImage'>
+                  <b:if cond='data:imagePlacement == "BEHIND"'>
+                    <div style='display:flex;align-items:center;gap:12px;'>
+                      <a expr:href='data:blog.homepageUrl'><img expr:alt='data:title' expr:src='data:sourceUrl' style='max-height:50px;width:auto;border-radius:8px;'/></a>
+                      <div>
+                        <h1 class='brand-name'><a expr:href='data:blog.homepageUrl'><data:title/></a></h1>
+                        <p class='brand-tagline'><data:description/></p>
+                      </div>
+                    </div>
+                  <b:else/>
+                    <a expr:href='data:blog.homepageUrl' style='display:inline-block;'>
+                      <img expr:alt='data:title' expr:src='data:sourceUrl' style='max-height:50px;width:auto;border-radius:8px;'/>
+                    </a>
+                  </b:if>
+                <b:else/>
+                  <div style='display:flex;align-items:center;gap:12px;'>
+                    <span class='brand-logo'>FL</span>
+                    <div>
+                      <h1 class='brand-name'><a expr:href='data:blog.homepageUrl'><data:title/></a></h1>
+                      <p class='brand-tagline'><b:if cond='data:description'><data:description/><b:else/>Official hub for football scores, news &amp; highlights</b:if></p>
+                    </div>
+                  </div>
+                </b:if>
+              </b:includable>
+            </b:widget>
+          </b:section>
         </div>
 
         <div class='header-right'>
-          <nav class='main-nav' id='mainNav'>
-            <a expr:href='data:blog.homepageUrl'>Home</a>
-            <a href='#fixtures'>Fixtures</a>
-            <a href='#latest'>News</a>
-            <a href='#teams'>Teams</a>
-            <a href='#videos'>Videos</a>
-            <a href='#fantasy'>Fantasy</a>
-          </nav>
+          <b:section id='header-menu' showaddelement='yes'>
+            <b:widget id='PageList1' locked='false' title='Header Menu' type='PageList'>
+              <b:includable id='main'>
+                <nav class='main-nav' id='mainNav'>
+                  <b:if cond='data:links'>
+                    <b:loop values='data:links' var='link'>
+                      <a expr:href='data:link.href'><data:link.title/></a>
+                    </b:loop>
+                  <b:else/>
+                    <a expr:href='data:blog.homepageUrl'>Home</a>
+                    <a href='#fixtures'>Fixtures</a>
+                    <a href='#latest'>News</a>
+                    <a href='#teams'>Teams</a>
+                    <a href='#videos'>Videos</a>
+                    <a href='#fantasy'>Fantasy</a>
+                  </b:if>
+                </nav>
+              </b:includable>
+            </b:widget>
+          </b:section>
           <form action='/search' class='search-form' method='get'>
             <input class='search-input' name='q' placeholder='Search articles…' type='text'/>
             <button class='search-submit' type='submit'>🔍</button>
