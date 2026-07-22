@@ -450,7 +450,7 @@
           <b:section id='header-menu' showaddelement='yes'>
             <b:widget id='PageList1' locked='false' title='Header Menu' type='PageList'>
               <b:includable id='main'>
-                <nav class='main-nav' id='mainNav'>
+                <nav id='mainNav' class='main-nav'>
                   <b:if cond='data:links'>
                     <b:loop values='data:links' var='link'>
                       <a expr:href='data:link.href'><data:link.title/></a>
