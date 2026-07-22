@@ -506,13 +506,7 @@
           <a expr:href='data:blog.homepageUrl'>Home</a>
           <span class='sep'>›</span>
           <b:if cond='data:view.isPost'>
-            <b:loop values='data:posts' var='post'>
-              <b:if cond='data:post.labels'>
-                <a expr:href='data:post.labels.first.url'><data:post.labels.first.name/></a>
-                <span class='sep'>›</span>
-              </b:if>
-              <span class='current'><data:post.title/></span>
-            </b:loop>
+            <span class='current'><data:view.pageTitle/></span>
           </b:if>
           <b:if cond='data:view.isLabel'>
             <span class='current'><data:view.pageTitle/></span>
@@ -535,7 +529,7 @@
           <!-- BLOG WIDGET — handles all page types -->
           <b:section id='main-blog-posts' showaddelement='no'>
             <b:widget id='Blog1' locked='true' title='Blog Posts' type='Blog'>
-              <b:includable id='main' var='this'>
+              <b:includable id='main'>
 
                 <!-- 404 ERROR PAGE -->
                 <b:if cond='data:view.isError'>
@@ -618,25 +612,25 @@
                     <!-- Related Posts + TOC Script (runs per post) -->
                     <span id='fl-post-meta'
                       expr:data-url='data:post.url'
-                      expr:data-label='data:post.labels ? data:post.labels.first.name : ""'
+                      expr:data-label='data:post.labels ? data:post.labels.first.name : &quot;&quot;'
                       style='display:none'/>
-                    <script>
+                    <script>//<![CDATA[
                       (function(){
                         // ---- TABLE OF CONTENTS ----
                         var body = document.getElementById('post-body');
                         var tocList = document.getElementById('toc-list');
                         var tocContainer = document.getElementById('toc-container');
                         var tocToggle = document.getElementById('toc-toggle');
-                        if(body &amp;&amp; tocList){
+                        if(body && tocList){
                           var headings = body.querySelectorAll('h2, h3');
-                          if(headings.length &gt; 2){
+                          if(headings.length > 2){
                             tocContainer.style.display = 'block';
                             headings.forEach(function(h, i){
                               var id = 'fl-h-' + i;
                               h.setAttribute('id', id);
                               var li = document.createElement('li');
                               if(h.tagName === 'H3') li.className = 'toc-h3';
-                              li.innerHTML = '&lt;a href="#' + id + '"&gt;' + h.textContent + '&lt;/a&gt;';
+                              li.innerHTML = '<a href="#' + id + '">' + h.textContent + '</a>';
                               tocList.appendChild(li);
                             });
                             tocToggle.addEventListener('click', function(){
@@ -645,25 +639,24 @@
                             });
                           }
                         }
-
                         // ---- RELATED POSTS BY LABEL ----
                         var meta = document.getElementById('fl-post-meta');
                         var currentUrl = meta ? meta.getAttribute('data-url') : '';
                         var firstLabel = meta ? meta.getAttribute('data-label') : '';
                         if(firstLabel){
                           var s = document.createElement('script');
-                          s.src = '/feeds/posts/default/-/' + encodeURIComponent(firstLabel) + '?alt=json-in-script&amp;max-results=5&amp;callback=flLoadRelated';
+                          s.src = '/feeds/posts/default/-/' + encodeURIComponent(firstLabel) + '?alt=json-in-script&max-results=5&callback=flLoadRelated';
                           document.head.appendChild(s);
                         }
                         window.flLoadRelated = function(data){
-                          var entries = (data.feed &amp;&amp; data.feed.entry) ? data.feed.entry : [];
+                          var entries = (data.feed && data.feed.entry) ? data.feed.entry : [];
                           var grid = document.getElementById('related-grid');
                           var wrap = document.getElementById('related-posts-container');
                           var filtered = entries.filter(function(e){
                             var l = e.link.find(function(x){ return x.rel === 'alternate'; });
-                            return l &amp;&amp; l.href !== currentUrl;
+                            return l && l.href !== currentUrl;
                           }).slice(0,3);
-                          if(filtered.length &gt; 0 &amp;&amp; grid){
+                          if(filtered.length > 0 && grid){
                             wrap.style.display = 'block';
                             filtered.forEach(function(e){
                               var href = e.link.find(function(x){ return x.rel === 'alternate'; }).href;
@@ -672,14 +665,14 @@
                               var card = document.createElement('a');
                               card.href = href;
                               card.className = 'related-card';
-                              card.innerHTML = (thumb ? '&lt;img src="' + thumb + '" alt="" loading="lazy"/&gt;' : '') +
-                                '&lt;div class="related-card-body"&gt;&lt;p class="related-card-title"&gt;' + title + '&lt;/p&gt;&lt;/div&gt;';
+                              card.innerHTML = (thumb ? '<img src="' + thumb + '" alt="" loading="lazy"/>' : '') +
+                                '<div class="related-card-body"><p class="related-card-title">' + title + '</p></div>';
                               grid.appendChild(card);
                             });
                           }
                         };
                       })();
-                    </script>
+                    //]]></script>
                   </b:loop>
 
                 <!-- ===== FEED VIEW (HOMEPAGE, LABEL, ARCHIVE, SEARCH, INDEX) ===== -->
@@ -741,6 +734,53 @@
                   <div class='pagination-wrapper'>
                     <b:include data='blog' name='nextprev'/>
                   </div>
+                </b:if>
+
+              </b:includable>
+
+              <!-- ===== REQUIRED STANDARD INCLUDABLES ===== -->
+              <b:includable id='nextprev'>
+                <b:if cond='data:blog.newerPageUrl or data:blog.olderPageUrl'>
+                  <div class='pagination'>
+                    <b:if cond='data:blog.newerPageUrl'>
+                      <a class='page-link newer' expr:href='data:blog.newerPageUrl'>← Newer</a>
+                    </b:if>
+                    <b:if cond='data:blog.olderPageUrl'>
+                      <a class='page-link older' expr:href='data:blog.olderPageUrl'>Older →</a>
+                    </b:if>
+                  </div>
+                </b:if>
+              </b:includable>
+
+              <b:includable id='comments' var='post'>
+                <b:if cond='data:post.allowComments'>
+                  <section class='comments-section'>
+                    <h3 class='comments-title'><data:post.commentCount/> Comments</h3>
+                    <b:loop values='data:post.comments' var='comment'>
+                      <div class='comment-item'>
+                        <strong><data:comment.authorName/></strong>
+                        <span class='comment-date'><data:comment.timestamp/></span>
+                        <p><data:comment.body/></p>
+                      </div>
+                    </b:loop>
+                    <div class='comment-form-wrapper'>
+                      <b:include name='commentForm'/>
+                    </div>
+                  </section>
+                </b:if>
+              </b:includable>
+
+              <b:includable id='commentForm'>
+                <b:if cond='data:post.embedCommentForm'>
+                  <iframe allowtransparency='true'
+                    expr:src='data:post.commentFormIframeSrc'
+                    class='blogger-iframe-colorize blogger-comment-from-post'
+                    frameborder='0'
+                    height='410'
+                    id='comment-editor'
+                    name='comment-editor'
+                    scrolling='no'
+                    width='100%'/>
                 </b:if>
               </b:includable>
             </b:widget>
