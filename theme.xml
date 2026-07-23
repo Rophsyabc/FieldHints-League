@@ -956,16 +956,28 @@
             </b:widget>
           </b:section>
 
-          <!-- Trending Tags -->
-          <section class='sidebar-card'>
-            <h3 class='sidebar-title'>Trending topics</h3>
-            <ul class='tag-list'>
-              <li>#NaijaDerby</li>
-              <li>#MatchdayOne</li>
-              <li>#TransferWindow</li>
-              <li>#FantasyLeague</li>
-            </ul>
-          </section>
+          <!-- Trending Tags (Editable in Layout) -->
+          <b:section id='sidebar-trending-topics' class='sidebar-card' showaddelement='yes' title='Trending Topics'>
+            <b:widget id='HTML7' locked='false' title='Trending Topics' type='HTML'>
+              <b:includable id='main'>
+                <div class='sidebar-card'>
+                  <b:if cond='data:title != ""'>
+                    <h3 class='sidebar-title'><data:title/></h3>
+                  </b:if>
+                  <ul class='tag-list'>
+                    <b:if cond='data:content != ""'>
+                      <data:content/>
+                    <b:else/>
+                      <li>#NaijaDerby</li>
+                      <li>#MatchdayOne</li>
+                      <li>#TransferWindow</li>
+                      <li>#FantasyLeague</li>
+                    </b:if>
+                  </ul>
+                </div>
+              </b:includable>
+            </b:widget>
+          </b:section>
 
           <!-- Sidebar AdSense Bottom -->
           <b:section id='sidebar-ad-bottom' showaddelement='yes'>
@@ -1000,34 +1012,97 @@
       </b:section>
     </div>
 
-    <!-- ===== FOOTER ===== -->
+    <!-- ===== FOOTER (Editable in Layout) ===== -->
     <footer class='site-footer'>
       <div class='container footer-inner'>
+        <!-- Footer Column 1: About -->
         <div class='footer-column'>
-          <h4>About <data:blog.title/></h4>
-          <p><data:blog.title/> is your trusted source for fixtures, scores, news and in-depth football coverage.</p>
+          <b:section id='footer-about-sec' showaddelement='yes' title='Footer About'>
+            <b:widget id='HTML8' locked='false' title='About Us' type='HTML'>
+              <b:includable id='main'>
+                <b:if cond='data:title != ""'>
+                  <h4><data:title/></h4>
+                <b:else/>
+                  <h4>About <data:blog.title/></h4>
+                </b:if>
+                <b:if cond='data:content != ""'>
+                  <data:content/>
+                <b:else/>
+                  <p><data:blog.title/> is your trusted source for fixtures, scores, news and in-depth football coverage.</p>
+                </b:if>
+              </b:includable>
+            </b:widget>
+          </b:section>
         </div>
+
+        <!-- Footer Column 2: Explore Links -->
         <div class='footer-column'>
-          <h4>Explore</h4>
-          <ul>
-            <li><a href='/p/about-us.html'>About Us</a></li>
-            <li><a href='/p/contact-us.html'>Contact Us</a></li>
-            <li><a href='#fixtures'>Fixtures</a></li>
-            <li><a href='#teams'>Teams</a></li>
-          </ul>
+          <b:section id='footer-explore-sec' showaddelement='yes' title='Footer Explore Links'>
+            <b:widget id='PageList2' locked='false' title='Explore' type='PageList'>
+              <b:includable id='main'>
+                <b:if cond='data:title != ""'>
+                  <h4><data:title/></h4>
+                <b:else/>
+                  <h4>Explore</h4>
+                </b:if>
+                <ul>
+                  <b:if cond='data:links'>
+                    <b:loop values='data:links' var='link'>
+                      <li><a expr:href='data:link.href'><data:link.title/></a></li>
+                    </b:loop>
+                  <b:else/>
+                    <li><a href='/p/about-us.html'>About Us</a></li>
+                    <li><a href='/p/contact-us.html'>Contact Us</a></li>
+                    <li><a href='#fixtures'>Fixtures</a></li>
+                    <li><a href='#teams'>Teams</a></li>
+                  </b:if>
+                </ul>
+              </b:includable>
+            </b:widget>
+          </b:section>
         </div>
+
+        <!-- Footer Column 3: Connect Links -->
         <div class='footer-column'>
-          <h4>Connect</h4>
-          <ul>
-            <li><a href='https://youtube.com' target='_blank'>YouTube</a></li>
-            <li><a href='https://tiktok.com' target='_blank'>TikTok</a></li>
-            <li><a href='https://twitter.com' target='_blank'>Twitter / X</a></li>
-            <li><a href='https://instagram.com' target='_blank'>Instagram</a></li>
-          </ul>
+          <b:section id='footer-connect-sec' showaddelement='yes' title='Footer Connect Links'>
+            <b:widget id='PageList3' locked='false' title='Connect' type='PageList'>
+              <b:includable id='main'>
+                <b:if cond='data:title != ""'>
+                  <h4><data:title/></h4>
+                <b:else/>
+                  <h4>Connect</h4>
+                </b:if>
+                <ul>
+                  <b:if cond='data:links'>
+                    <b:loop values='data:links' var='link'>
+                      <li><a expr:href='data:link.href' target='_blank'><data:link.title/></a></li>
+                    </b:loop>
+                  <b:else/>
+                    <li><a href='https://youtube.com' target='_blank'>YouTube</a></li>
+                    <li><a href='https://tiktok.com' target='_blank'>TikTok</a></li>
+                    <li><a href='https://twitter.com' target='_blank'>Twitter / X</a></li>
+                    <li><a href='https://instagram.com' target='_blank'>Instagram</a></li>
+                  </b:if>
+                </ul>
+              </b:includable>
+            </b:widget>
+          </b:section>
         </div>
+
+        <!-- Footer Column 4: Copyright & Legal Meta -->
         <div class='footer-column footer-meta'>
-          <p>© 2026 <data:blog.title/>. All rights reserved.</p>
-          <p><a href='/p/privacy-policy.html'>Privacy Policy</a> · <a href='/p/terms-and-conditions.html'>Terms &amp; Conditions</a></p>
+          <b:section id='footer-meta-sec' showaddelement='yes' title='Footer Copyright & Legal'>
+            <b:widget id='HTML9' locked='false' title='Copyright & Legal' type='HTML'>
+              <b:includable id='main'>
+                <b:if cond='data:content != ""'>
+                  <data:content/>
+                <b:else/>
+                  <p>© 2026 <data:blog.title/>. All rights reserved.</p>
+                  <p><a href='/p/privacy-policy.html'>Privacy Policy</a> · <a href='/p/terms-and-conditions.html'>Terms &amp; Conditions</a></p>
+                </b:if>
+              </b:includable>
+            </b:widget>
+          </b:section>
         </div>
       </div>
     </footer>
