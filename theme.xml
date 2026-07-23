@@ -481,32 +481,37 @@
             <b:widget id='PageList1' locked='false' title='Header Menu' type='PageList'>
               <b:includable id='main'>
                 <nav id='mainNav' class='main-nav'>
+                  <!-- Always-visible core nav with dropdown submenus -->
+                  <a expr:href='data:blog.homepageUrl'>Home</a>
+
+                  <div class='nav-dropdown'>
+                    <a href='/search/label/News'>News</a>
+                    <ul class='dropdown-menu'>
+                      <li><a href='/search/label/Premier%20League'>Premier League</a></li>
+                      <li><a href='/search/label/La%20Liga'>La Liga</a></li>
+                      <li><a href='/search/label/Transfers'>Transfers</a></li>
+                      <li><a href='/search/label/Analysis'>Tactical Analysis</a></li>
+                    </ul>
+                  </div>
+
+                  <div class='nav-dropdown'>
+                    <a href='/search/label/Videos'>Videos</a>
+                    <ul class='dropdown-menu'>
+                      <li><a href='/search/label/Highlights'>Match Highlights</a></li>
+                      <li><a href='/search/label/Goals'>Goals of the Week</a></li>
+                      <li><a href='/search/label/Interviews'>Interviews</a></li>
+                    </ul>
+                  </div>
+
+                  <a href='#fixtures'>Fixtures</a>
+                  <a href='#teams'>Teams</a>
+                  <a href='#fantasy'>Fantasy</a>
+
+                  <!-- Extra links added via Blogger Layout Editor PageList widget -->
                   <b:if cond='data:links'>
                     <b:loop values='data:links' var='link'>
                       <a expr:href='data:link.href'><data:link.title/></a>
                     </b:loop>
-                  <b:else/>
-                    <a expr:href='data:blog.homepageUrl'>Home</a>
-                    <div class='nav-dropdown'>
-                      <a href='#latest'>News</a>
-                      <ul class='dropdown-menu'>
-                        <li><a href='/search/label/Premier%20League'>Premier League</a></li>
-                        <li><a href='/search/label/La%20Liga'>La Liga</a></li>
-                        <li><a href='/search/label/Transfers'>Transfers</a></li>
-                        <li><a href='/search/label/Analysis'>Tactical Analysis</a></li>
-                      </ul>
-                    </div>
-                    <div class='nav-dropdown'>
-                      <a href='#videos'>Videos</a>
-                      <ul class='dropdown-menu'>
-                        <li><a href='#videos'>Match Highlights</a></li>
-                        <li><a href='#videos'>Goals of the Week</a></li>
-                        <li><a href='#videos'>Interviews</a></li>
-                      </ul>
-                    </div>
-                    <a href='#fixtures'>Fixtures</a>
-                    <a href='#teams'>Teams</a>
-                    <a href='#fantasy'>Fantasy</a>
                   </b:if>
                 </nav>
               </b:includable>
