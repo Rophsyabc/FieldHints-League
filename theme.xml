@@ -599,12 +599,12 @@
         <div class='hero-carousel' id='heroCarousel'>
           <div class='carousel-track' id='carouselTrack'>
 
-            <b:section id='hero-slider-section' showaddelement='yes' title='Hero Carousel (Select 3 Posts in Layout)'>
-
-              <b:widget id='FeaturedPost1' locked='false' title='Slide 1 — Select Post from Recent 5' type='FeaturedPost'>
+            <b:section id='hero-slider-section' showaddelement='yes' title='Hero Post Carousel'>
+              <!-- Slide 1: Featured Post Widget -->
+              <b:widget id='FeaturedPost1' locked='false' title='Carousel Featured Post' type='FeaturedPost'>
                 <b:includable id='main'>
                   <b:if cond='data:post.title'>
-                    <div class='carousel-slide' expr:style='data:post.featuredImage ? "background-image:linear-gradient(to top,rgba(5,7,10,.97) 25%,rgba(5,7,10,.55) 60%,rgba(5,7,10,.1)),url(" + data:post.featuredImage + ");" : "background:radial-gradient(135deg,#1d4ed8 0%,#05070a 70%);"'>
+                    <div class='carousel-slide' expr:data-post-url='data:post.url' expr:style='data:post.featuredImage ? "background-image:linear-gradient(to top,rgba(5,7,10,.97) 25%,rgba(5,7,10,.55) 60%,rgba(5,7,10,.1)),url(" + data:post.featuredImage + ");" : "background:radial-gradient(135deg,#1d4ed8 0%,#05070a 70%);"'>
                       <div class='carousel-slide-content'>
                         <b:if cond='data:post.labels'>
                           <span class='hero-label'><data:post.labels.first.name/></span>
@@ -622,48 +622,18 @@
                 </b:includable>
               </b:widget>
 
-              <b:widget id='FeaturedPost2' locked='false' title='Slide 2 — Select Post from Recent 5' type='FeaturedPost'>
+              <!-- Additional Carousel Posts (Add links in Blogger Layout Editor) -->
+              <b:widget id='LinkList10' locked='false' title='Carousel Additional Posts (Add links here)' type='LinkList'>
                 <b:includable id='main'>
-                  <b:if cond='data:post.title'>
-                    <div class='carousel-slide' expr:style='data:post.featuredImage ? "background-image:linear-gradient(to top,rgba(5,7,10,.97) 25%,rgba(5,7,10,.55) 60%,rgba(5,7,10,.1)),url(" + data:post.featuredImage + ");" : "background:radial-gradient(135deg,#1d4ed8 0%,#05070a 70%);"'>
-                      <div class='carousel-slide-content'>
-                        <b:if cond='data:post.labels'>
-                          <span class='hero-label'><data:post.labels.first.name/></span>
-                        <b:else/>
-                          <span class='hero-label'>Featured Story</span>
-                        </b:if>
-                        <h2 class='hero-title'><a expr:href='data:post.url' style='color:#fff;'><data:post.title/></a></h2>
-                        <b:if cond='data:post.snippet'>
-                          <p class='hero-excerpt'><data:post.snippet/></p>
-                        </b:if>
-                        <a class='btn-primary' expr:href='data:post.url'>Read Story &#8594;</a>
-                      </div>
+                  <b:if cond='data:links'>
+                    <div id='carouselLinkData' style='display:none;'>
+                      <b:loop values='data:links' var='link'>
+                        <span class='c-link-item' expr:data-href='data:link.href' expr:data-title='data:link.title'/>
+                      </b:loop>
                     </div>
                   </b:if>
                 </b:includable>
               </b:widget>
-
-              <b:widget id='FeaturedPost3' locked='false' title='Slide 3 — Select Post from Recent 5' type='FeaturedPost'>
-                <b:includable id='main'>
-                  <b:if cond='data:post.title'>
-                    <div class='carousel-slide' expr:style='data:post.featuredImage ? "background-image:linear-gradient(to top,rgba(5,7,10,.97) 25%,rgba(5,7,10,.55) 60%,rgba(5,7,10,.1)),url(" + data:post.featuredImage + ");" : "background:radial-gradient(135deg,#1d4ed8 0%,#05070a 70%);"'>
-                      <div class='carousel-slide-content'>
-                        <b:if cond='data:post.labels'>
-                          <span class='hero-label'><data:post.labels.first.name/></span>
-                        <b:else/>
-                          <span class='hero-label'>Featured Story</span>
-                        </b:if>
-                        <h2 class='hero-title'><a expr:href='data:post.url' style='color:#fff;'><data:post.title/></a></h2>
-                        <b:if cond='data:post.snippet'>
-                          <p class='hero-excerpt'><data:post.snippet/></p>
-                        </b:if>
-                        <a class='btn-primary' expr:href='data:post.url'>Read Story &#8594;</a>
-                      </div>
-                    </div>
-                  </b:if>
-                </b:includable>
-              </b:widget>
-
             </b:section>
 
           </div>
@@ -680,46 +650,75 @@
           var progressEl = document.getElementById('carouselProgress');
           if(!track) return;
 
-          var slides = track.querySelectorAll('.carousel-slide');
-
-          if(slides.length < 1){
-            var s = document.createElement('script');
-            s.src = '/feeds/posts/default?max-results=5&alt=json-in-script&callback=flAutoCarousel';
-            document.head.appendChild(s);
-            window.flAutoCarousel = function(json){
-              var entries = (json && json.feed && json.feed.entry) ? json.feed.entry : [];
-              if(!entries.length) return;
-              track.innerHTML = '';
-              entries.slice(0,3).forEach(function(e, i){
-                var url = '';
-                (e.link||[]).forEach(function(l){ if(l.rel==='alternate') url=l.href; });
-                var title = e.title ? e.title.$t : '';
-                var img = '';
-                if(e.media$thumbnail && e.media$thumbnail.url){
-                  img = e.media$thumbnail.url.replace(/\/s\d+-c\//,'/s1280-h720-c/').replace(/\/s\d+\//,'/s1280/');
-                }
-                var snippet = e.summary ? e.summary.$t.replace(/<[^>]+>/g,'') : '';
-                if(snippet.length>130) snippet=snippet.substring(0,130)+'…';
-                var cat = (e.category && e.category.length) ? e.category[0].term : 'Latest';
-
-                var slide = document.createElement('div');
-                slide.className = 'carousel-slide';
-                slide.style.backgroundImage = img ? 'url("'+img+'")' : '';
-                if(!img) slide.style.background = 'radial-gradient(135deg,#1d4ed8 0%,#05070a 70%)';
-                slide.innerHTML =
-                  '<div class="carousel-slide-content">'+
-                  '<span class="hero-label">'+cat+'</span>'+
-                  '<h2 class="hero-title"><a href="'+url+'" style="color:#fff;">'+title+'</a></h2>'+
-                  (snippet?'<p class="hero-excerpt">'+snippet+'</p>':'')+
-                  '<a class="btn-primary" href="'+url+'">Read Story &#8594;</a>'+
-                  '</div>';
-                track.appendChild(slide);
-              });
-              initCarousel(track.querySelectorAll('.carousel-slide'));
-            };
-          } else {
-            initCarousel(slides);
+          var linkItems = document.querySelectorAll('#carouselLinkData .c-link-item');
+          var customUrls = [];
+          for(var i=0; i<linkItems.length; i++){
+            var href = linkItems[i].getAttribute('data-href');
+            if(href) customUrls.push(href);
           }
+
+          var slide1 = track.querySelector('.carousel-slide');
+
+          var s = document.createElement('script');
+          s.src = '/feeds/posts/default?max-results=5&alt=json-in-script&callback=flBuildCarousel';
+          document.head.appendChild(s);
+
+          window.flBuildCarousel = function(json){
+            var entries = (json && json.feed && json.feed.entry) ? json.feed.entry : [];
+            if(!entries.length && !slide1) return;
+
+            function parseEntry(e){
+              var url = '';
+              (e.link||[]).forEach(function(l){ if(l.rel==='alternate') url=l.href; });
+              var title = e.title ? e.title.$t : '';
+              var img = '';
+              if(e.media$thumbnail && e.media$thumbnail.url){
+                img = e.media$thumbnail.url.replace(/\/s\d+-c\//,'/s1280-h720-c/').replace(/\/s\d+\//,'/s1280/');
+              }
+              var snippet = e.summary ? e.summary.$t.replace(/<[^>]+>/g,'') : (e.content ? e.content.$t.replace(/<[^>]+>/g,'') : '');
+              if(snippet.length>130) snippet=snippet.substring(0,130)+'…';
+              var cat = (e.category && e.category.length) ? e.category[0].term : 'Featured Story';
+              return { url: url, title: title, img: img, snippet: snippet, cat: cat };
+            }
+
+            var finalPosts = [];
+
+            if(customUrls.length > 0){
+              customUrls.forEach(function(u){
+                var match = entries.find(function(e){
+                  var eUrl = '';
+                  (e.link||[]).forEach(function(l){ if(l.rel==='alternate') eUrl=l.href; });
+                  return eUrl === u || eUrl.indexOf(u) !== -1 || u.indexOf(eUrl) !== -1;
+                });
+                if(match) finalPosts.push(parseEntry(match));
+              });
+            }
+
+            entries.forEach(function(e){
+              if(finalPosts.length >= 3) return;
+              var parsed = parseEntry(e);
+              var exists = finalPosts.some(function(p){ return p.url === parsed.url; });
+              if(!exists) finalPosts.push(parsed);
+            });
+
+            track.innerHTML = '';
+            finalPosts.slice(0,3).forEach(function(p){
+              var slide = document.createElement('div');
+              slide.className = 'carousel-slide';
+              slide.style.backgroundImage = p.img ? 'url("'+p.img+'")' : '';
+              if(!p.img) slide.style.background = 'radial-gradient(135deg,#1d4ed8 0%,#05070a 70%)';
+              slide.innerHTML =
+                '<div class="carousel-slide-content">'+
+                '<span class="hero-label">'+p.cat+'</span>'+
+                '<h2 class="hero-title"><a href="'+p.url+'" style="color:#fff;">'+p.title+'</a></h2>'+
+                (p.snippet?'<p class="hero-excerpt">'+p.snippet+'</p>':'')+
+                '<a class="btn-primary" href="'+p.url+'">Read Story &#8594;</a>'+
+                '</div>';
+              track.appendChild(slide);
+            });
+
+            initCarousel(track.querySelectorAll('.carousel-slide'));
+          };
 
           function initCarousel(slideEls){
             var total = slideEls.length;
