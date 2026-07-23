@@ -26,11 +26,11 @@
       <title><data:blog.title/> - Official Football Scores, News &amp; Highlights</title>
       <meta expr:content='data:blog.metaDescription ? data:blog.metaDescription : data:blog.title + " is your premier source for football scores, fixtures, transfer news, match analysis, and highlights."' name='description'/>
     <b:else/>
-      <title><data:view.pageTitle/> | <data:blog.title/></title>
+      <title><data:blog.pageTitle/> | <data:blog.title/></title>
       <b:if cond='data:view.description'>
         <meta expr:content='data:view.description' name='description'/>
       <b:else/>
-        <meta expr:content='data:view.pageTitle + " - Read full football coverage, scores, and analysis on " + data:blog.title' name='description'/>
+        <meta expr:content='data:blog.pageTitle + " - Read full football coverage, scores, and analysis on " + data:blog.title' name='description'/>
       </b:if>
     </b:if>
 
@@ -46,7 +46,7 @@
     <link expr:href='data:blog.feedUrl' rel='alternate' title='RSS Feed' type='application/atom+xml'/>
 
     <!-- ===== OPEN GRAPH ===== -->
-    <meta expr:content='data:view.pageTitle' property='og:title'/>
+    <meta expr:content='data:blog.pageTitle' property='og:title'/>
     <meta expr:content='data:view.url.canonical' property='og:url'/>
     <meta expr:content='data:blog.title' property='og:site_name'/>
     <b:if cond='data:view.isPost'>
@@ -63,7 +63,7 @@
 
     <!-- ===== TWITTER CARDS ===== -->
     <meta content='summary_large_image' name='twitter:card'/>
-    <meta expr:content='data:view.pageTitle' name='twitter:title'/>
+    <meta expr:content='data:blog.pageTitle' name='twitter:title'/>
     <meta expr:content='data:view.description ? data:view.description : data:blog.metaDescription' name='twitter:description'/>
     <b:if cond='data:view.featuredImage'>
       <meta expr:content='data:view.featuredImage' name='twitter:image'/>
@@ -565,13 +565,13 @@
           <a expr:href='data:blog.homepageUrl'>Home</a>
           <span class='sep'>›</span>
           <b:if cond='data:view.isPost'>
-            <span class='current'><data:view.pageTitle/></span>
+            <span class='current'><data:blog.pageTitle/></span>
           </b:if>
           <b:if cond='data:view.isLabel'>
-            <span class='current'><data:view.pageTitle/></span>
+            <span class='current'><data:blog.pageTitle/></span>
           </b:if>
           <b:if cond='data:view.isArchive'>
-            <span class='current'><data:view.pageTitle/></span>
+            <span class='current'><data:blog.pageTitle/></span>
           </b:if>
           <b:if cond='data:view.isSearch'>
             <span class='current'>Search Results</span>
