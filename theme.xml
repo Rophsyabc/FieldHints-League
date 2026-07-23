@@ -593,122 +593,191 @@
       </nav>
     </b:if>
 
-    <!-- ===== HERO 3-POST CAROUSEL (Editable in Layout) ===== -->
+    <!-- ===== HERO 3-POST CAROUSEL (Editable in Blogger Layout Editor) ===== -->
     <b:if cond='data:view.isHomepage'>
       <div class='container' style='margin-top:24px;'>
-        <b:section id='hero-slider-section' showaddelement='yes' title='Hero Post Carousel'>
-          <b:widget id='HTML10' locked='false' title='Hero Carousel — Label posts &quot;Featured&quot; to show here' type='HTML'>
-            <b:includable id='main'>
-              <div class='hero-carousel' id='heroCarousel'>
-                <!-- Loading placeholder slide -->
-                <div class='carousel-track' id='carouselTrack'>
-                  <div class='carousel-slide' style='background:radial-gradient(135deg,#1d4ed8 0%,#05070a 70%);'>
-                    <div class='carousel-slide-content'>
-                      <span class='hero-label'>Welcome to <data:blog.title/></span>
-                      <h2 class='hero-title' style='color:#fff;margin:8px 0 14px;'>Official Football Scores, News &amp; Highlights</h2>
-                      <p class='hero-excerpt'>Label exactly 3 posts as &quot;Featured&quot; in Blogger to populate this carousel automatically.</p>
-                      <a class='btn-primary' href='#latest'>Explore Stories &#8594;</a>
+        <div class='hero-carousel' id='heroCarousel'>
+          <div class='carousel-track' id='carouselTrack'>
+
+            <b:section id='hero-slider-section' showaddelement='yes' title='Hero Carousel (Select 3 Posts in Layout)'>
+
+              <b:widget id='FeaturedPost1' locked='false' title='Slide 1 — Select Post from Recent 5' type='FeaturedPost'>
+                <b:includable id='main'>
+                  <b:if cond='data:post.title'>
+                    <div class='carousel-slide' expr:style='data:post.featuredImage ? "background-image:linear-gradient(to top,rgba(5,7,10,.97) 25%,rgba(5,7,10,.55) 60%,rgba(5,7,10,.1)),url(" + data:post.featuredImage + ");" : "background:radial-gradient(135deg,#1d4ed8 0%,#05070a 70%);"'>
+                      <div class='carousel-slide-content'>
+                        <b:if cond='data:post.labels'>
+                          <span class='hero-label'><data:post.labels.first.name/></span>
+                        <b:else/>
+                          <span class='hero-label'>Featured Story</span>
+                        </b:if>
+                        <h2 class='hero-title'><a expr:href='data:post.url' style='color:#fff;'><data:post.title/></a></h2>
+                        <b:if cond='data:post.snippet'>
+                          <p class='hero-excerpt'><data:post.snippet/></p>
+                        </b:if>
+                        <a class='btn-primary' expr:href='data:post.url'>Read Story &#8594;</a>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <button aria-label='Previous slide' class='carousel-btn prev' id='carouselPrev'>&#8249;</button>
-                <button aria-label='Next slide' class='carousel-btn next' id='carouselNext'>&#8250;</button>
-                <div class='carousel-dots' id='carouselDots'/>
-                <div class='carousel-progress' id='carouselProgress'/>
-              </div>
+                  </b:if>
+                </b:includable>
+              </b:widget>
 
-              <script>//<![CDATA[
-              (function(){
-                var LABEL = 'Featured';
-                var MAX = 3;
+              <b:widget id='FeaturedPost2' locked='false' title='Slide 2 — Select Post from Recent 5' type='FeaturedPost'>
+                <b:includable id='main'>
+                  <b:if cond='data:post.title'>
+                    <div class='carousel-slide' expr:style='data:post.featuredImage ? "background-image:linear-gradient(to top,rgba(5,7,10,.97) 25%,rgba(5,7,10,.55) 60%,rgba(5,7,10,.1)),url(" + data:post.featuredImage + ");" : "background:radial-gradient(135deg,#1d4ed8 0%,#05070a 70%);"'>
+                      <div class='carousel-slide-content'>
+                        <b:if cond='data:post.labels'>
+                          <span class='hero-label'><data:post.labels.first.name/></span>
+                        <b:else/>
+                          <span class='hero-label'>Featured Story</span>
+                        </b:if>
+                        <h2 class='hero-title'><a expr:href='data:post.url' style='color:#fff;'><data:post.title/></a></h2>
+                        <b:if cond='data:post.snippet'>
+                          <p class='hero-excerpt'><data:post.snippet/></p>
+                        </b:if>
+                        <a class='btn-primary' expr:href='data:post.url'>Read Story &#8594;</a>
+                      </div>
+                    </div>
+                  </b:if>
+                </b:includable>
+              </b:widget>
 
-                window.flSliderCB = function(json){
-                  var entries = (json &amp;&amp; json.feed &amp;&amp; json.feed.entry) ? json.feed.entry : [];
-                  if(!entries.length) return;
+              <b:widget id='FeaturedPost3' locked='false' title='Slide 3 — Select Post from Recent 5' type='FeaturedPost'>
+                <b:includable id='main'>
+                  <b:if cond='data:post.title'>
+                    <div class='carousel-slide' expr:style='data:post.featuredImage ? "background-image:linear-gradient(to top,rgba(5,7,10,.97) 25%,rgba(5,7,10,.55) 60%,rgba(5,7,10,.1)),url(" + data:post.featuredImage + ");" : "background:radial-gradient(135deg,#1d4ed8 0%,#05070a 70%);"'>
+                      <div class='carousel-slide-content'>
+                        <b:if cond='data:post.labels'>
+                          <span class='hero-label'><data:post.labels.first.name/></span>
+                        <b:else/>
+                          <span class='hero-label'>Featured Story</span>
+                        </b:if>
+                        <h2 class='hero-title'><a expr:href='data:post.url' style='color:#fff;'><data:post.title/></a></h2>
+                        <b:if cond='data:post.snippet'>
+                          <p class='hero-excerpt'><data:post.snippet/></p>
+                        </b:if>
+                        <a class='btn-primary' expr:href='data:post.url'>Read Story &#8594;</a>
+                      </div>
+                    </div>
+                  </b:if>
+                </b:includable>
+              </b:widget>
 
-                  var track = document.getElementById('carouselTrack');
-                  var dotsEl = document.getElementById('carouselDots');
-                  var progressEl = document.getElementById('carouselProgress');
-                  if(!track) return;
+            </b:section>
 
-                  track.innerHTML = '';
-                  dotsEl.innerHTML = '';
+          </div>
+          <button aria-label='Previous slide' class='carousel-btn prev' id='carouselPrev'>&#8249;</button>
+          <button aria-label='Next slide' class='carousel-btn next' id='carouselNext'>&#8250;</button>
+          <div class='carousel-dots' id='carouselDots'/>
+          <div class='carousel-progress' id='carouselProgress'/>
+        </div>
 
-                  var slides = Math.min(entries.length, MAX);
-                  var current = 0;
-                  var autoTimer;
+        <script>//<![CDATA[
+        (function(){
+          var track = document.getElementById('carouselTrack');
+          var dotsEl = document.getElementById('carouselDots');
+          var progressEl = document.getElementById('carouselProgress');
+          if(!track) return;
 
-                  entries.slice(0, MAX).forEach(function(e, i){
-                    var url = '';
-                    (e.link||[]).forEach(function(l){ if(l.rel==='alternate') url=l.href; });
-                    var title = e.title ? e.title.$t : '';
-                    var img = '';
-                    if(e.media$thumbnail &amp;&amp; e.media$thumbnail.url){
-                      img = e.media$thumbnail.url.replace(/\/s\d+-c\//,'/s1280-h720-c/').replace(/\/s\d+\//,'/s1280/');
-                    }
-                    var snippet = e.summary ? e.summary.$t.replace(/&lt;[^&gt;]+&gt;/g,'') : '';
-                    if(snippet.length&gt;130) snippet=snippet.substring(0,130)+'…';
-                    var cat = (e.category &amp;&amp; e.category.length) ? e.category[0].term : LABEL;
+          var slides = track.querySelectorAll('.carousel-slide');
 
-                    var slide = document.createElement('div');
-                    slide.className = 'carousel-slide';
-                    slide.style.backgroundImage = img ? 'url("'+img+'")' : '';
-                    if(!img) slide.style.background = 'radial-gradient(135deg,#1d4ed8 0%,#05070a 70%)';
-                    slide.innerHTML =
-                      '&lt;div class="carousel-slide-content"&gt;'+
-                      '&lt;span class="hero-label"&gt;'+cat+'&lt;/span&gt;'+
-                      '&lt;h2 class="hero-title"&gt;&lt;a href="'+url+'" style="color:#fff;"&gt;'+title+'&lt;/a&gt;&lt;/h2&gt;'+
-                      (snippet?'&lt;p class="hero-excerpt"&gt;'+snippet+'&lt;/p&gt;':'')+
-                      '&lt;a class="btn-primary" href="'+url+'"&gt;Read Story &#8594;&lt;/a&gt;'+
-                      '&lt;/div&gt;';
-                    track.appendChild(slide);
+          if(slides.length < 1){
+            var s = document.createElement('script');
+            s.src = '/feeds/posts/default?max-results=5&alt=json-in-script&callback=flAutoCarousel';
+            document.head.appendChild(s);
+            window.flAutoCarousel = function(json){
+              var entries = (json && json.feed && json.feed.entry) ? json.feed.entry : [];
+              if(!entries.length) return;
+              track.innerHTML = '';
+              entries.slice(0,3).forEach(function(e, i){
+                var url = '';
+                (e.link||[]).forEach(function(l){ if(l.rel==='alternate') url=l.href; });
+                var title = e.title ? e.title.$t : '';
+                var img = '';
+                if(e.media$thumbnail && e.media$thumbnail.url){
+                  img = e.media$thumbnail.url.replace(/\/s\d+-c\//,'/s1280-h720-c/').replace(/\/s\d+\//,'/s1280/');
+                }
+                var snippet = e.summary ? e.summary.$t.replace(/<[^>]+>/g,'') : '';
+                if(snippet.length>130) snippet=snippet.substring(0,130)+'…';
+                var cat = (e.category && e.category.length) ? e.category[0].term : 'Latest';
 
-                    var dot = document.createElement('button');
-                    dot.className = 'carousel-dot'+(i===0?' active':'');
-                    dot.setAttribute('aria-label','Slide '+(i+1));
-                    dotsEl.appendChild(dot);
-                    dot.onclick = function(){ goTo(i); resetAuto(); };
+                var slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                slide.style.backgroundImage = img ? 'url("'+img+'")' : '';
+                if(!img) slide.style.background = 'radial-gradient(135deg,#1d4ed8 0%,#05070a 70%)';
+                slide.innerHTML =
+                  '<div class="carousel-slide-content">'+
+                  '<span class="hero-label">'+cat+'</span>'+
+                  '<h2 class="hero-title"><a href="'+url+'" style="color:#fff;">'+title+'</a></h2>'+
+                  (snippet?'<p class="hero-excerpt">'+snippet+'</p>':'')+
+                  '<a class="btn-primary" href="'+url+'">Read Story &#8594;</a>'+
+                  '</div>';
+                track.appendChild(slide);
+              });
+              initCarousel(track.querySelectorAll('.carousel-slide'));
+            };
+          } else {
+            initCarousel(slides);
+          }
+
+          function initCarousel(slideEls){
+            var total = slideEls.length;
+            if(total < 1) return;
+            dotsEl.innerHTML = '';
+            var current = 0;
+            var autoTimer;
+
+            for(var i=0; i<total; i++){
+              var dot = document.createElement('button');
+              dot.className = 'carousel-dot' + (i===0 ? ' active' : '');
+              dot.setAttribute('aria-label', 'Slide ' + (i+1));
+              (function(idx){
+                dot.onclick = function(){ goTo(idx); resetAuto(); };
+              })(i);
+              dotsEl.appendChild(dot);
+            }
+
+            function goTo(n){
+              current = ((n % total) + total) % total;
+              track.style.transform = 'translateX(-' + (current * 100) + '%)';
+              var dots = dotsEl.querySelectorAll('.carousel-dot');
+              for(var d=0; d<dots.length; d++){
+                dots[d].classList.toggle('active', d===current);
+              }
+              if(progressEl){
+                progressEl.style.transition = 'none';
+                progressEl.style.width = '0%';
+                requestAnimationFrame(function(){
+                  requestAnimationFrame(function(){
+                    progressEl.style.transition = 'width 5s linear';
+                    progressEl.style.width = '100%';
                   });
+                });
+              }
+            }
 
-                  function goTo(n){
-                    current = ((n%slides)+slides)%slides;
-                    track.style.transform = 'translateX(-'+(current*100)+'%)';
-                    [].forEach.call(dotsEl.querySelectorAll('.carousel-dot'),function(d,i){ d.classList.toggle('active',i===current); });
-                    if(progressEl){ progressEl.style.transition='none'; progressEl.style.width='0%';
-                      requestAnimationFrame(function(){ requestAnimationFrame(function(){
-                        progressEl.style.transition='width 5s linear'; progressEl.style.width='100%';
-                      }); });
-                    }
-                  }
+            function resetAuto(){
+              clearInterval(autoTimer);
+              autoTimer = setInterval(function(){ goTo(current + 1); }, 5000);
+            }
 
-                  function resetAuto(){
-                    clearInterval(autoTimer);
-                    autoTimer = setInterval(function(){ goTo(current+1); }, 5000);
-                  }
+            var prevBtn = document.getElementById('carouselPrev');
+            var nextBtn = document.getElementById('carouselNext');
+            if(prevBtn) prevBtn.onclick = function(){ goTo(current - 1); resetAuto(); };
+            if(nextBtn) nextBtn.onclick = function(){ goTo(current + 1); resetAuto(); };
 
-                  var prevBtn=document.getElementById('carouselPrev');
-                  var nextBtn=document.getElementById('carouselNext');
-                  if(prevBtn) prevBtn.onclick=function(){ goTo(current-1); resetAuto(); };
-                  if(nextBtn) nextBtn.onclick=function(){ goTo(current+1); resetAuto(); };
+            var wrapper = document.getElementById('heroCarousel');
+            if(wrapper){
+              wrapper.addEventListener('mouseenter', function(){ clearInterval(autoTimer); if(progressEl){progressEl.style.transition='none';} });
+              wrapper.addEventListener('mouseleave', function(){ resetAuto(); });
+            }
 
-                  var wrapper=document.getElementById('heroCarousel');
-                  if(wrapper){
-                    wrapper.addEventListener('mouseenter',function(){ clearInterval(autoTimer); if(progressEl){progressEl.style.transition='none';} });
-                    wrapper.addEventListener('mouseleave',function(){ resetAuto(); });
-                  }
-
-                  goTo(0);
-                  resetAuto();
-                };
-
-                var s=document.createElement('script');
-                s.src='/feeds/posts/default/-/'+encodeURIComponent(LABEL)+'?max-results='+MAX+'&amp;alt=json-in-script&amp;callback=flSliderCB';
-                document.head.appendChild(s);
-              })();
-              //]]></script>
-            </b:includable>
-          </b:widget>
-        </b:section>
+            goTo(0);
+            resetAuto();
+          }
+        })();
+        //]]></script>
       </div>
     </b:if>
 
