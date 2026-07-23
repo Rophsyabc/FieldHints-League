@@ -144,7 +144,7 @@
       .brand-tagline { margin:2px 0 0; font-size:12px; color:var(--text-3); }
 
       .header-right { display:flex; align-items:center; gap:12px; }
-      .main-nav { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+      .main-nav { display:flex; flex-wrap:nowrap; gap:6px; align-items:center; overflow:visible; }
       /* Only style TOP-LEVEL nav links — not dropdown sub-items */
       .main-nav > a,
       .main-nav .nav-dropdown > a { color:var(--text-2); font-size:13px; font-weight:600; padding:7px 14px; border-radius:20px; border:1px solid transparent; transition:all .2s var(--ease); display:inline-flex; align-items:center; gap:4px; white-space:nowrap; }
@@ -152,8 +152,8 @@
       .main-nav .nav-dropdown > a:hover { color:#fff; background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.06); }
 
       /* ---- SUBMENU DROPDOWNS ---- */
-      .nav-dropdown { position:relative; display:inline-block; }
-      .nav-dropdown > a::after { content:' ▾'; font-size:10px; margin-left:3px; opacity:.7; }
+      .nav-dropdown { position:relative; display:inline-flex; align-items:center; }
+      .nav-dropdown > a::after { content:' \25BE'; font-size:11px; margin-left:2px; opacity:.7; }
       /* Dropdown panel — drops vertically below parent */
       .dropdown-menu { position:absolute; top:calc(100% + 6px); left:0; min-width:190px; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:6px 0; margin:0; box-shadow:var(--shadow-lg); opacity:0; visibility:hidden; transform:translateY(8px); transition:all .25s var(--ease); z-index:9999; list-style:none; display:flex; flex-direction:column; }
       .nav-dropdown:hover .dropdown-menu { opacity:1; visibility:visible; transform:translateY(0); }
@@ -511,13 +511,6 @@
                   <a href='#fixtures'>Fixtures</a>
                   <a href='#teams'>Teams</a>
                   <a href='#fantasy'>Fantasy</a>
-
-                  <!-- Extra links added via Blogger Layout Editor PageList widget -->
-                  <b:if cond='data:links'>
-                    <b:loop values='data:links' var='link'>
-                      <a expr:href='data:link.href'><data:link.title/></a>
-                    </b:loop>
-                  </b:if>
                 </nav>
               </b:includable>
             </b:widget>
