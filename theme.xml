@@ -1091,8 +1091,8 @@
 
         <!-- Footer Column 4: Copyright & Legal Meta -->
         <div class='footer-column footer-meta'>
-          <b:section id='footer-meta-sec' showaddelement='yes' title='Footer Copyright & Legal'>
-            <b:widget id='HTML9' locked='false' title='Copyright & Legal' type='HTML'>
+          <b:section id='footer-meta-sec' showaddelement='yes' title='Footer Copyright &amp; Legal'>
+            <b:widget id='HTML9' locked='false' title='Copyright &amp; Legal' type='HTML'>
               <b:includable id='main'>
                 <b:if cond='data:content != ""'>
                   <data:content/>
