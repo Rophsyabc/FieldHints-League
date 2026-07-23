@@ -509,7 +509,18 @@
                   </div>
 
                   <a href='#fixtures'>Fixtures</a>
-                  <a href='#teams'>Teams</a>
+
+                  <div class='nav-dropdown'>
+                    <a href='/search/label/Teams'>Teams</a>
+                    <ul class='dropdown-menu'>
+                      <li><a href='/search/label/Premier%20League'>Premier League Teams</a></li>
+                      <li><a href='/search/label/La%20Liga'>La Liga Teams</a></li>
+                      <li><a href='/search/label/Bundesliga'>Bundesliga Teams</a></li>
+                      <li><a href='/search/label/International'>International</a></li>
+                      <li><a href='/search/label/Teams'>All Teams</a></li>
+                    </ul>
+                  </div>
+
                   <a href='#fantasy'>Fantasy</a>
                 </nav>
               </b:includable>
