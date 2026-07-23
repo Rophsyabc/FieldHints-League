@@ -174,10 +174,10 @@
       .popular-post-date { font-size:11px; color:var(--text-3); }
 
       /* ---- HERO CAROUSEL ---- */
-      .hero-carousel { position:relative; overflow:hidden; border-radius:20px; margin-bottom:32px; border:1px solid var(--border); box-shadow:var(--shadow-lg); min-height:420px; background:var(--bg-card); }
+      .hero-carousel { position:relative; overflow:hidden; border-radius:20px; margin-bottom:32px; border:1px solid var(--border); box-shadow:var(--shadow-lg); min-height:440px; background:var(--bg-card); }
       .carousel-track { display:flex; width:100%; transition:transform .65s cubic-bezier(.16,1,.3,1); will-change:transform; }
-      .carousel-slide { position:relative; min-width:100%; min-height:420px; flex-shrink:0; display:flex; align-items:flex-end; padding:48px 44px; background-size:cover; background-position:center; background-color:var(--bg-card); }
-      .carousel-slide::before { content:''; position:absolute; inset:0; background:linear-gradient(to top,rgba(5,7,10,.97) 25%,rgba(5,7,10,.55) 60%,rgba(5,7,10,.1)); z-index:1; }
+      .carousel-slide { position:relative; min-width:100%; min-height:440px; flex-shrink:0; display:flex; align-items:flex-end; padding:52px 48px; background-size:cover; background-position:center center; background-repeat:no-repeat; background-color:var(--bg-card); }
+      .carousel-slide::before { content:''; position:absolute; inset:0; background:linear-gradient(to top,rgba(5,7,10,.92) 0%,rgba(5,7,10,.45) 55%,rgba(5,7,10,.15) 100%); z-index:1; }
       .carousel-slide-content { position:relative; z-index:2; max-width:680px; }
       .carousel-slide-content .hero-title { margin:8px 0 14px; font-size:32px; }
       .carousel-slide-content .hero-title a { color:#fff !important; }
@@ -604,7 +604,7 @@
               <b:widget id='FeaturedPost1' locked='false' title='Carousel Featured Post' type='FeaturedPost'>
                 <b:includable id='main'>
                   <b:if cond='data:post.title'>
-                    <div class='carousel-slide' expr:data-post-url='data:post.url' expr:style='data:post.featuredImage ? "background-image:linear-gradient(to top,rgba(5,7,10,.97) 25%,rgba(5,7,10,.55) 60%,rgba(5,7,10,.1)),url(" + data:post.featuredImage + ");" : "background:radial-gradient(135deg,#1d4ed8 0%,#05070a 70%);"'>
+                    <div class='carousel-slide' expr:data-post-url='data:post.url' expr:style='data:post.featuredImage ? "background-image:linear-gradient(to top,rgba(5,7,10,.92) 0%,rgba(5,7,10,.45) 55%,rgba(5,7,10,.15) 100%),url(" + resizeImage(data:post.featuredImage, 1600, "16:9") + ");" : "background:radial-gradient(135deg,#1d4ed8 0%,#05070a 70%);"'>
                       <div class='carousel-slide-content'>
                         <b:if cond='data:post.labels'>
                           <span class='hero-label'><data:post.labels.first.name/></span>
@@ -673,7 +673,18 @@
               var title = e.title ? e.title.$t : '';
               var img = '';
               if(e.media$thumbnail && e.media$thumbnail.url){
-                img = e.media$thumbnail.url.replace(/\/s\d+-c\//,'/s1280-h720-c/').replace(/\/s\d+\//,'/s1280/');
+                img = e.media$thumbnail.url;
+              } else if(e.content && e.content.$t){
+                var m = e.content.$t.match(/<img[^>]+src=["']([^"']+)["']/i);
+                if(m) img = m[1];
+              }
+              if(img){
+                img = img.replace(/\/s\d+(-[c|h|w\d]+)?\//, '/s1600/')
+                         .replace(/\/w\d+-h\d+(-[c|h|w\d]+)?\//, '/w1600-h900-c/')
+                         .replace(/\/s72-c\//, '/s1600/')
+                         .replace(/=w\d+-h\d+-[^/]+/, '=w1600-h900')
+                         .replace(/=s\d+-[^/]+/, '=s1600')
+                         .replace(/=s\d+/, '=s1600');
               }
               var snippet = e.summary ? e.summary.$t.replace(/<[^>]+>/g,'') : (e.content ? e.content.$t.replace(/<[^>]+>/g,'') : '');
               if(snippet.length>130) snippet=snippet.substring(0,130)+'…';
