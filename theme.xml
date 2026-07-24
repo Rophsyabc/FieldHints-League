@@ -1528,26 +1528,39 @@
         if(overlay) overlay.classList.add('open');
       }
 
+      // Stop any taps/clicks inside the drawer from bleeding through to background elements
+      if(nav){
+        nav.addEventListener('click', function(e){ e.stopPropagation(); });
+        nav.addEventListener('touchstart', function(e){ e.stopPropagation(); }, {passive:true});
+      }
+
       if(hbg){
-        hbg.addEventListener('click', function(e){
+        var handleHbgToggle = function(e){
+          e.preventDefault();
           e.stopPropagation();
           var isOpened = nav && nav.classList.contains('open');
           if(isOpened){ closeMenu(); } else { openMenu(); }
-        });
+        };
+        hbg.addEventListener('click', handleHbgToggle);
       }
 
       if(navCloseBtn){
-        navCloseBtn.addEventListener('click', function(e){
+        var handleNavClose = function(e){
+          e.preventDefault();
           e.stopPropagation();
           closeMenu();
-        });
+        };
+        navCloseBtn.addEventListener('click', handleNavClose);
       }
 
       if(overlay){
-        overlay.addEventListener('click', function(e){
+        var handleOverlayClose = function(e){
+          e.preventDefault();
           e.stopPropagation();
           closeMenu();
-        });
+        };
+        overlay.addEventListener('click', handleOverlayClose);
+        overlay.addEventListener('touchstart', handleOverlayClose, {passive:false});
       }
 
       // ---- MOBILE ACCORDION DROPDOWNS ----
@@ -1567,7 +1580,7 @@
           }
 
           // Mobile accordion toggle on parent click — NEVER closes the drawer!
-          parentLink.addEventListener('click', function(e){
+          var handleAccordionToggle = function(e){
             if(window.innerWidth <= 900 || (nav && nav.classList.contains('open'))){
               e.preventDefault();
               e.stopPropagation();
@@ -1578,12 +1591,18 @@
               });
               dropdown.classList.toggle('expanded', !currentlyExpanded);
             }
-          });
+          };
+
+          parentLink.addEventListener('click', handleAccordionToggle);
         });
 
-        // Close menu ONLY on anchor links like #fixtures or #fantasy
+        // Close menu ONLY on in-page section links like #fixtures or #fantasy (excluding # or empty anchors)
         nav.querySelectorAll('a[href^="#"]').forEach(function(anchorLink){
-          anchorLink.addEventListener('click', function(){
+          var href = anchorLink.getAttribute('href');
+          // Skip placeholder # links or accordion parent triggers
+          if(!href || href === '#' || href === '#!' || anchorLink.matches('.nav-dropdown > a')) return;
+
+          anchorLink.addEventListener('click', function(e){
             if(nav && nav.classList.contains('open')){
               closeMenu();
             }
