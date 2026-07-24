@@ -312,7 +312,6 @@ html,body{width:100%!important;max-width:100vw!important;overflow-x:hidden!impor
 /* JS-injected arrow — hidden everywhere except inside mobile drawer */
 .mob-arrow{display:none!important;}
 
-.mobile-nav-header{display:none;}
 /* RESPONSIVE */
 @media(max-width:900px){
   body{padding-top:90px;}
@@ -323,12 +322,8 @@ html,body{width:100%!important;max-width:100vw!important;overflow-x:hidden!impor
   .hero-title{font-size:26px;}
   .search-form{display:none;}
   .hamburger{display:flex;}
-  .main-nav{position:fixed;top:0;right:0;width:300px;max-width:88vw;height:100vh;background:#141927;flex-direction:column;padding:32px 20px 32px;transform:translateX(100%);transition:transform .35s var(--ease);z-index:999999!important;border-left:1px solid rgba(255,255,255,.08);gap:4px;border-radius:0;overflow-y:auto;box-shadow:-12px 0 40px rgba(0,0,0,0.9);pointer-events:auto!important;}
+  .main-nav{position:fixed;top:0;right:0;width:300px;max-width:88vw;height:100vh;background:#141927;flex-direction:column;padding:80px 20px 32px;transform:translateX(100%);transition:transform .35s var(--ease);z-index:999999!important;border-left:1px solid rgba(255,255,255,.08);gap:4px;border-radius:0;overflow-y:auto;box-shadow:-12px 0 40px rgba(0,0,0,0.9);pointer-events:auto!important;}
   .main-nav.open{transform:translateX(0);}
-  .mobile-nav-header{display:flex!important;align-items:center;justify-content:space-between;width:100%;padding-bottom:14px;margin-bottom:12px;border-bottom:1px solid rgba(255,255,255,.1);}
-  .mobile-nav-title{font-size:12px;font-weight:800;letter-spacing:1px;color:var(--text-3);text-transform:uppercase;}
-  .mobile-nav-close{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:22px;width:34px;height:34px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:all .2s;}
-  .mobile-nav-close:hover{background:var(--live-red);border-color:var(--live-red);}
   .main-nav > a{display:block!important;padding:13px 16px;border-radius:10px;font-size:15px;font-weight:600;width:100%;color:#e2e8f0!important;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);margin-bottom:4px;}
   .main-nav > a:hover{color:#fff!important;background:rgba(37,99,235,.2)!important;border-color:rgba(37,99,235,.3);}
   .main-nav .nav-dropdown{width:100%;display:block;position:static;margin-bottom:4px;}
