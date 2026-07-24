@@ -456,19 +456,47 @@
           box-shadow:-12px 0 40px rgba(0,0,0,0.9);
         }
         .main-nav.open { transform:translateX(0); }
-        /* Mobile drawer — top-level links */
-        .main-nav > a,
-        .main-nav .nav-dropdown > a { display:block !important; padding:13px 16px; border-radius:10px; font-size:15px; font-weight:600; width:100%; color:#e2e8f0 !important; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.05); margin-bottom:2px; }
-        .main-nav > a:hover,
+        /* Mobile drawer — top-level direct links */
+        .main-nav > a { display:block !important; padding:13px 16px; border-radius:10px; font-size:15px; font-weight:600; width:100%; color:#e2e8f0 !important; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.05); margin-bottom:4px; }
+        .main-nav > a:hover { color:#fff !important; background:rgba(37,99,235,.2) !important; border-color:rgba(37,99,235,.3); }
+        /* Mobile drawer — dropdown parent wrapper */
+        .main-nav .nav-dropdown { width:100%; display:block; position:static; margin-bottom:4px; }
+        /* The parent clickable row — uses flex so arrow sits at right */
+        .main-nav .nav-dropdown > a {
+          display:flex !important; align-items:center; justify-content:space-between;
+          padding:13px 16px; border-radius:10px; font-size:15px; font-weight:600;
+          width:100%; color:#e2e8f0 !important; background:rgba(255,255,255,.03);
+          border:1px solid rgba(255,255,255,.05); cursor:pointer;
+        }
         .main-nav .nav-dropdown > a:hover { color:#fff !important; background:rgba(37,99,235,.2) !important; border-color:rgba(37,99,235,.3); }
-        /* Hide the CSS arrow on mobile — it was showing as a broken square */
-        .main-nav .nav-dropdown > a::after { display:none; }
-        .main-nav .nav-dropdown { width:100%; display:block; position:static; }
-        /* Mobile drawer — sub-menu items */
-        .main-nav .dropdown-menu { position:static !important; opacity:1 !important; visibility:visible !important; transform:none !important; box-shadow:none !important; border:none !important; padding:0 0 8px 12px; margin:0; background:transparent !important; display:flex !important; flex-direction:column; min-width:100%; }
-        .main-nav .dropdown-menu li { display:block; width:100%; }
-        .main-nav .dropdown-menu li a { display:block !important; padding:9px 14px; font-size:14px; color:#94a3b8 !important; background:none !important; border:none !important; border-radius:8px; transition:color .15s, background .15s; }
-        .main-nav .dropdown-menu li a:hover { color:#93c5fd !important; background:rgba(37,99,235,.12) !important; padding-left:18px; }
+        /* Hide the CSS ::after arrow — we use a JS-injected span instead */
+        .main-nav .nav-dropdown > a::after { display:none !important; }
+        /* JS-injected arrow indicator */
+        .main-nav .nav-dropdown > a .mob-arrow {
+          display:inline-block; font-size:12px; opacity:.6; transition:transform .25s ease; flex-shrink:0;
+        }
+        .main-nav .nav-dropdown.expanded > a .mob-arrow { transform:rotate(180deg); opacity:1; }
+        /* Sub-menu — collapsed by default */
+        .main-nav .dropdown-menu {
+          position:static !important; opacity:1 !important; visibility:visible !important;
+          transform:none !important; box-shadow:none !important; border:none !important;
+          margin:0; background:transparent !important;
+          display:block !important; min-width:100%;
+          max-height:0; overflow:hidden; transition:max-height .3s ease, padding .3s ease;
+          padding:0 0 0 12px;
+        }
+        /* Sub-menu expanded */
+        .main-nav .nav-dropdown.expanded > .dropdown-menu {
+          max-height:400px;
+          padding:4px 0 8px 12px;
+        }
+        .main-nav .dropdown-menu li { display:block; width:100%; list-style:none; }
+        .main-nav .dropdown-menu li a {
+          display:block !important; padding:9px 14px; font-size:14px;
+          color:#94a3b8 !important; background:none !important; border:none !important;
+          border-radius:8px; transition:color .15s, background .15s, padding-left .15s;
+        }
+        .main-nav .dropdown-menu li a:hover { color:#93c5fd !important; background:rgba(37,99,235,.12) !important; padding-left:20px; }
       }
       @media (max-width:600px) {
         .container { padding:0 14px; }
@@ -1467,11 +1495,17 @@
       var hbg = document.getElementById('hamburger');
       var nav = document.getElementById('mainNav');
       var overlay = document.getElementById('mobileOverlay');
+
       function closeMenu(){
         if(hbg) hbg.classList.remove('open');
         if(nav) nav.classList.remove('open');
         if(overlay) overlay.classList.remove('open');
+        // Collapse all accordions when menu closes
+        if(nav){
+          nav.querySelectorAll('.nav-dropdown.expanded').forEach(function(d){ d.classList.remove('expanded'); });
+        }
       }
+
       if(hbg){
         hbg.addEventListener('click', function(){
           var open = nav.classList.contains('open');
@@ -1483,6 +1517,43 @@
         });
       }
       if(overlay){ overlay.addEventListener('click', closeMenu); }
+
+      // ---- MOBILE ACCORDION DROPDOWNS ----
+      // Inject expand arrows and set up click-to-toggle for each .nav-dropdown
+      function initMobileAccordion(){
+        if(!nav) return;
+        nav.querySelectorAll('.nav-dropdown').forEach(function(dropdown){
+          var parentLink = dropdown.querySelector(':scope > a');
+          var subMenu = dropdown.querySelector(':scope > .dropdown-menu');
+          if(!parentLink || !subMenu) return;
+
+          // Inject arrow span if not already there
+          if(!parentLink.querySelector('.mob-arrow')){
+            var arrow = document.createElement('span');
+            arrow.className = 'mob-arrow';
+            arrow.setAttribute('aria-hidden', 'true');
+            arrow.textContent = '\u25BE'; // ▾
+            parentLink.appendChild(arrow);
+          }
+
+          // Toggle accordion on parent link click
+          parentLink.addEventListener('click', function(e){
+            // Only intercept clicks when in mobile drawer mode
+            if(window.innerWidth > 900) return;
+            e.preventDefault();
+            var isExpanded = dropdown.classList.contains('expanded');
+            // Close all others first
+            nav.querySelectorAll('.nav-dropdown.expanded').forEach(function(d){
+              if(d !== dropdown) d.classList.remove('expanded');
+            });
+            // Toggle this one
+            dropdown.classList.toggle('expanded', !isExpanded);
+          });
+        });
+      }
+      initMobileAccordion();
+      // Re-init on window resize in case DOM changes
+      window.addEventListener('resize', initMobileAccordion);
 
       // ---- ANTI-COPY CONTENT PROTECTION ----
       document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
