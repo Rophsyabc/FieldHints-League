@@ -1519,41 +1519,55 @@
       if(overlay){ overlay.addEventListener('click', closeMenu); }
 
       // ---- MOBILE ACCORDION DROPDOWNS ----
-      // Inject expand arrows and set up click-to-toggle for each .nav-dropdown
-      function initMobileAccordion(){
+      // Single init — uses data-mob-init flag to prevent duplicate listeners
+      (function setupMobileAccordion(){
         if(!nav) return;
+
+        // Set up each dropdown parent
         nav.querySelectorAll('.nav-dropdown').forEach(function(dropdown){
+          if(dropdown.dataset.mobInit) return; // already wired up
+          dropdown.dataset.mobInit = '1';
+
           var parentLink = dropdown.querySelector(':scope > a');
-          var subMenu = dropdown.querySelector(':scope > .dropdown-menu');
+          var subMenu   = dropdown.querySelector(':scope > .dropdown-menu');
           if(!parentLink || !subMenu) return;
 
-          // Inject arrow span if not already there
+          // Inject arrow span inside the link (once)
           if(!parentLink.querySelector('.mob-arrow')){
             var arrow = document.createElement('span');
             arrow.className = 'mob-arrow';
             arrow.setAttribute('aria-hidden', 'true');
-            arrow.textContent = '\u25BE'; // ▾
+            arrow.innerHTML = '&#9660;'; // ▼
             parentLink.appendChild(arrow);
           }
 
-          // Toggle accordion on parent link click
+          // Parent link click — only intercept when drawer is open (mobile mode)
           parentLink.addEventListener('click', function(e){
-            // Only intercept clicks when in mobile drawer mode
-            if(window.innerWidth > 900) return;
+            if(!nav.classList.contains('open')) return; // desktop: let link navigate normally
             e.preventDefault();
+            e.stopPropagation(); // don't bubble to overlay or document
             var isExpanded = dropdown.classList.contains('expanded');
-            // Close all others first
+            // Collapse any other open dropdowns first
             nav.querySelectorAll('.nav-dropdown.expanded').forEach(function(d){
               if(d !== dropdown) d.classList.remove('expanded');
             });
-            // Toggle this one
+            // Toggle this dropdown
             dropdown.classList.toggle('expanded', !isExpanded);
           });
         });
-      }
-      initMobileAccordion();
-      // Re-init on window resize in case DOM changes
-      window.addEventListener('resize', initMobileAccordion);
+
+        // Sub-menu links: close the whole drawer when user taps a sub-link
+        nav.querySelectorAll('.dropdown-menu a').forEach(function(link){
+          if(link.dataset.mobInit) return;
+          link.dataset.mobInit = '1';
+          link.addEventListener('click', function(e){
+            e.stopPropagation();
+            // Small delay so the navigation starts before drawer closes
+            setTimeout(closeMenu, 150);
+          });
+        });
+
+      })();
 
       // ---- ANTI-COPY CONTENT PROTECTION ----
       document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
