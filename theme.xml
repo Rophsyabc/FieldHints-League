@@ -1517,9 +1517,8 @@
         if(overlay) overlay.classList.add('open');
       }
 
-      // Stop any taps/clicks inside the drawer from bleeding through to background elements
+      // Prevent touch events from bleeding through the nav panel to background page elements
       if(nav){
-        nav.addEventListener('click', function(e){ e.stopPropagation(); });
         nav.addEventListener('touchstart', function(e){ e.stopPropagation(); }, {passive:true});
       }
 
@@ -1534,13 +1533,22 @@
       }
 
       if(overlay){
-        var handleOverlayClose = function(e){
-          e.preventDefault();
-          e.stopPropagation();
+        overlay.addEventListener('click', function(e){
+          // CRITICAL: if the click actually came from inside the nav panel, ignore it completely.
+          // This handles the case where some mobile browsers route nav-area touches to the overlay.
+          if(nav && nav.contains(e.target)) return;
+          if(hbg && hbg.contains(e.target)) return;
           closeMenu();
-        };
-        overlay.addEventListener('click', handleOverlayClose);
+        });
       }
+
+      // Catch any document-level click that slips through — only close if outside nav+hamburger
+      document.addEventListener('click', function(e){
+        if(!nav || !nav.classList.contains('open')) return;
+        if(nav.contains(e.target)) return;
+        if(hbg && hbg.contains(e.target)) return;
+        closeMenu();
+      });
 
       // ---- MOBILE ACCORDION DROPDOWNS ----
       if(nav){
