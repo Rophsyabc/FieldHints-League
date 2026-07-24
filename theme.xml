@@ -452,12 +452,16 @@
         .hamburger { display:flex; }
         .main-nav {
           position:fixed; top:0; right:0; width:300px; max-width:88vw; height:100vh;
-          background:#141927; flex-direction:column; padding:80px 20px 32px;
+          background:#141927; flex-direction:column; padding:32px 20px 32px;
           transform:translateX(100%); transition:transform .35s var(--ease); z-index:99999;
           border-left:1px solid rgba(255,255,255,.08); gap:4px; border-radius:0; overflow-y:auto;
           box-shadow:-12px 0 40px rgba(0,0,0,0.9);
         }
         .main-nav.open { transform:translateX(0); }
+        .mobile-nav-header { display:flex !important; align-items:center; justify-content:space-between; width:100%; padding-bottom:14px; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,.1); }
+        .mobile-nav-title { font-size:12px; font-weight:800; letter-spacing:1px; color:var(--text-3); text-transform:uppercase; }
+        .mobile-nav-close { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); color:#fff; font-size:22px; width:34px; height:34px; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1; transition:all .2s; }
+        .mobile-nav-close:hover { background:var(--live-red); border-color:var(--live-red); }
         /* Mobile drawer — top-level direct links */
         .main-nav > a { display:block !important; padding:13px 16px; border-radius:10px; font-size:15px; font-weight:600; width:100%; color:#e2e8f0 !important; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.05); margin-bottom:4px; }
         .main-nav > a:hover { color:#fff !important; background:rgba(37,99,235,.2) !important; border-color:rgba(37,99,235,.3); }
@@ -581,6 +585,12 @@
             <b:widget id='PageList1' locked='false' title='Header Menu' type='PageList'>
               <b:includable id='main'>
                 <nav id='mainNav' class='main-nav'>
+                  <!-- Mobile Header inside drawer with Close Button -->
+                  <div class='mobile-nav-header'>
+                    <span class='mobile-nav-title'>Navigation</span>
+                    <button aria-label='Close menu' class='mobile-nav-close' id='mobileNavClose'>&amp;times;</button>
+                  </div>
+
                   <!-- Always-visible core nav with dropdown submenus -->
                   <a expr:href='data:blog.homepageUrl'>Home</a>
 
@@ -1444,7 +1454,11 @@
       var mainNav = document.getElementById('mainNav');
       if(mainNav){
         var childAnchors = Array.from(mainNav.querySelectorAll(':scope > a'));
-        if(childAnchors.length > 0){
+        var hasUnderscoreItems = childAnchors.some(function(a){
+          var t = a.textContent.trim();
+          return t.indexOf('_') === 0 || t.indexOf('-') === 0;
+        });
+        if(hasUnderscoreItems){
           var currentWrapper = null;
           var currentUl = null;
           childAnchors.forEach(function(a){
@@ -1493,99 +1507,89 @@
         }, {passive:true});
       }
 
-      // ---- MOBILE HAMBURGER MENU ----
+      // ---- MOBILE HAMBURGER & DRAWER TOGGLE ----
       var hbg = document.getElementById('hamburger');
       var nav = document.getElementById('mainNav');
       var overlay = document.getElementById('mobileOverlay');
+      var navCloseBtn = document.getElementById('mobileNavClose');
 
       function closeMenu(){
         if(hbg) hbg.classList.remove('open');
         if(nav) nav.classList.remove('open');
         if(overlay) overlay.classList.remove('open');
-        // Collapse all accordions when menu closes
         if(nav){
           nav.querySelectorAll('.nav-dropdown.expanded').forEach(function(d){ d.classList.remove('expanded'); });
         }
       }
 
+      function openMenu(){
+        if(hbg) hbg.classList.add('open');
+        if(nav) nav.classList.add('open');
+        if(overlay) overlay.classList.add('open');
+      }
+
       if(hbg){
-        hbg.addEventListener('click', function(){
-          var open = nav.classList.contains('open');
-          if(open){ closeMenu(); } else {
-            hbg.classList.add('open');
-            nav.classList.add('open');
-            overlay.classList.add('open');
-          }
+        hbg.addEventListener('click', function(e){
+          e.stopPropagation();
+          var isOpened = nav && nav.classList.contains('open');
+          if(isOpened){ closeMenu(); } else { openMenu(); }
         });
       }
-      if(overlay){ overlay.addEventListener('click', closeMenu); }
 
-      // Blanket guard: stop ALL clicks inside the nav drawer from reaching
-      // document-level handlers (Blogger or browser) that might close the menu.
-      if(nav){
-        nav.addEventListener('click', function(e){ e.stopImmediatePropagation(); });
+      if(navCloseBtn){
+        navCloseBtn.addEventListener('click', function(e){
+          e.stopPropagation();
+          closeMenu();
+        });
+      }
+
+      if(overlay){
+        overlay.addEventListener('click', function(e){
+          e.stopPropagation();
+          closeMenu();
+        });
       }
 
       // ---- MOBILE ACCORDION DROPDOWNS ----
-      // Single init — uses data-mob-init flag to prevent duplicate listeners
-      (function setupMobileAccordion(){
-        if(!nav) return;
-
-        // Set up each dropdown parent
+      if(nav){
         nav.querySelectorAll('.nav-dropdown').forEach(function(dropdown){
-          if(dropdown.dataset.mobInit) return; // already wired up
-          dropdown.dataset.mobInit = '1';
-
           var parentLink = dropdown.querySelector(':scope > a');
-          var subMenu   = dropdown.querySelector(':scope > .dropdown-menu');
+          var subMenu = dropdown.querySelector(':scope > .dropdown-menu');
           if(!parentLink || !subMenu) return;
 
-          // Inject arrow span inside the link (once)
+          // Inject expand arrow indicator if missing
           if(!parentLink.querySelector('.mob-arrow')){
             var arrow = document.createElement('span');
             arrow.className = 'mob-arrow';
             arrow.setAttribute('aria-hidden', 'true');
-            arrow.innerHTML = '&#9660;'; // ▼
+            arrow.innerHTML = '&#9660;';
             parentLink.appendChild(arrow);
           }
 
-          // Parent link click — only intercept when drawer is open (mobile mode)
+          // Mobile accordion toggle on parent click — NEVER closes the drawer!
           parentLink.addEventListener('click', function(e){
-            if(!nav.classList.contains('open')) return; // desktop: let link navigate normally
-            e.preventDefault();
-            e.stopImmediatePropagation(); // block all other handlers at every level
-            var isExpanded = dropdown.classList.contains('expanded');
-            // Collapse any other open dropdowns first
-            nav.querySelectorAll('.nav-dropdown.expanded').forEach(function(d){
-              if(d !== dropdown) d.classList.remove('expanded');
-            });
-            // Toggle this dropdown
-            dropdown.classList.toggle('expanded', !isExpanded);
+            if(window.innerWidth <= 900 || (nav && nav.classList.contains('open'))){
+              e.preventDefault();
+              e.stopPropagation();
+              var currentlyExpanded = dropdown.classList.contains('expanded');
+              // Collapse all other dropdowns
+              nav.querySelectorAll('.nav-dropdown.expanded').forEach(function(other){
+                if(other !== dropdown) other.classList.remove('expanded');
+              });
+              dropdown.classList.toggle('expanded', !currentlyExpanded);
+            }
           });
         });
 
-        // Sub-menu links: navigate AND close drawer
-        nav.querySelectorAll('.dropdown-menu a').forEach(function(link){
-          if(link.dataset.mobInit) return;
-          link.dataset.mobInit = '1';
-          link.addEventListener('click', function(e){
-            e.stopImmediatePropagation();
-            setTimeout(closeMenu, 150);
+        // Close menu ONLY on anchor links like #fixtures or #fantasy
+        nav.querySelectorAll('a[href^="#"]').forEach(function(anchorLink){
+          anchorLink.addEventListener('click', function(){
+            if(nav && nav.classList.contains('open')){
+              closeMenu();
+            }
           });
         });
-
-        // Top-level direct links (Home, Fixtures, Fantasy): close drawer on tap
-        nav.querySelectorAll(':scope > a').forEach(function(link){
-          if(link.dataset.mobInit) return;
-          link.dataset.mobInit = '1';
-          link.addEventListener('click', function(e){
-            if(!nav.classList.contains('open')) return;
-            e.stopImmediatePropagation();
-            setTimeout(closeMenu, 150);
-          });
-        });
-
-      })();
+      }
 
       // ---- ANTI-COPY CONTENT PROTECTION ----
       document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
